@@ -1,0 +1,51 @@
+package com.poly.admin.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Nationalized;
+
+import java.time.Instant;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+public class DiscountAuditLog {
+    @Id
+    @Column(name = "ID", nullable = false)
+    private Integer id;
+
+    @Size(max = 50)
+    @Nationalized
+    @Column(name = "Type", length = 50)
+    private String type;
+
+    @ColumnDefault("getdate()")
+    @Column(name = "\"Timestamp\"")
+    private Instant timestamp;
+
+    @Nationalized
+    @Lob
+    @Column(name = "Old_data")
+    private String oldData;
+
+    @Nationalized
+    @Lob
+    @Column(name = "New_data")
+    private String newData;
+
+    @Size(max = 255)
+    @Nationalized
+    @Column(name = "CreatedBy")
+    private String createdBy;
+
+}
