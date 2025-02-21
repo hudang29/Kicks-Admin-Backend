@@ -5,9 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
@@ -17,8 +15,6 @@ import java.time.LocalDate;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 public class Coupon {
     @Id
@@ -42,7 +38,8 @@ public class Coupon {
     @Column(name = "Description", length = 500)
     private String description;
 
-    @Column(name = "DiscountRate", precision = 5, scale = 2)
+    @NotNull
+    @Column(name = "DiscountRate", nullable = false, precision = 5, scale = 2)
     private BigDecimal discountRate;
 
     @NotNull

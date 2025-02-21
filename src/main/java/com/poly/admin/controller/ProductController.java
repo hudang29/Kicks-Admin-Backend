@@ -2,6 +2,7 @@ package com.poly.admin.controller;
 
 import com.poly.admin.dto.ProductDTO;
 import com.poly.admin.dto.ProductDetailDTO;
+import com.poly.admin.dto.SizeDTO;
 import com.poly.admin.model.ProductDetail;
 import com.poly.admin.service.CategoryService;
 import com.poly.admin.service.ProductService;
@@ -26,15 +27,15 @@ public class ProductController {
 
     /*------ Product detail -------*/
 
-    @GetMapping("/api/show-products/{id}")
-    public List<ProductDetailDTO> showProductDetails(@PathVariable("id") Integer id) {
+    @GetMapping("/api/show-product/{id}")
+    public List<ProductDetailDTO> showProductByID(@PathVariable("id") Integer id) {
         return productService.getDetailByProductId(id);
     }
 
-//    @GetMapping("/api/show-products/{id}")
-//    public List<ProductDetail> showProductDetails(@PathVariable("id") Integer id) {
-//        return productService.getDetailByProductId(id);
-//    }
+    @GetMapping("/api/product-detail/{id}")
+    public List<SizeDTO> showDetail(@PathVariable("id") Integer id) {
+        return productService.getAllSizes(id);
+    }
 
 
 }

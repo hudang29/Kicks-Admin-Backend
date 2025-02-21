@@ -3,9 +3,7 @@ package com.poly.admin.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
@@ -17,8 +15,6 @@ import java.time.Instant;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "\"Order\"")
 public class Order {
@@ -33,13 +29,13 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "Staff_ID")
-    private Employee staff;
+    @JoinColumn(name = "Employee_ID")
+    private Employee employee;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "Payment_ID")
-    private Payment payment;
+    private com.poly.admin.model.Payment payment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
@@ -47,12 +43,12 @@ public class Order {
     private Coupon coupon;
 
     @Size(max = 255)
-    @NotNull
     @Nationalized
-    @Column(name = "Shipping_address", nullable = false)
+    @Column(name = "Shipping_address")
     private String shippingAddress;
 
-    @Column(name = "Total_amount", precision = 18, scale = 2)
+    @NotNull
+    @Column(name = "Total_amount", nullable = false, precision = 10, scale = 2)
     private BigDecimal totalAmount;
 
     @ColumnDefault("getdate()")
@@ -60,9 +56,9 @@ public class Order {
     private Instant orderDate;
 
     @Size(max = 50)
-    @NotNull
     @Nationalized
-    @Column(name = "Order_status", nullable = false, length = 50)
+    @ColumnDefault("'Pending'")
+    @Column(name = "Order_status", length = 50)
     private String orderStatus;
 
 }

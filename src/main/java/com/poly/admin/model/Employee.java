@@ -5,17 +5,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 public class Employee {
     @Id
@@ -47,9 +43,8 @@ public class Employee {
     private String phone;
 
     @Size(max = 50)
-    @NotNull
     @Nationalized
-    @Column(name = "Role", nullable = false, length = 50)
+    @Column(name = "Role", length = 50)
     private String role;
 
     @Size(max = 255)

@@ -3,9 +3,7 @@ package com.poly.admin.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
@@ -15,8 +13,6 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 @Table(name = "Order_detail")
 public class OrderDetail {
@@ -34,23 +30,19 @@ public class OrderDetail {
     @JoinColumn(name = "Product_ID")
     private Product product;
 
-    @Column(name = "Price", precision = 18, scale = 2)
+    @NotNull
+    @Column(name = "Price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    @Size(max = 10)
-    @NotNull
-    @Nationalized
-    @Column(name = "\"Size\"", nullable = false, length = 10)
-    private String size;
+    @Column(name = "\"Size\"")
+    private Integer size;
 
     @Size(max = 50)
-    @NotNull
     @Nationalized
-    @Column(name = "Color", nullable = false, length = 50)
+    @Column(name = "Color", length = 50)
     private String color;
 
-    @NotNull
-    @Column(name = "Quantity", nullable = false)
+    @Column(name = "Quantity")
     private Integer quantity;
 
 }

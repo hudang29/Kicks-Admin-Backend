@@ -3,9 +3,7 @@ package com.poly.admin.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
@@ -17,8 +15,6 @@ import java.time.Instant;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
 public class Product {
     @Id
@@ -27,18 +23,23 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "Category_ID")
-    private Category category;
+    @JoinColumn(name = "ShoesCategory_ID")
+    private com.poly.admin.model.ShoesCategory shoesCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "Supplier_ID")
-    private Supplier supplier;
+    @JoinColumn(name = "GenderCategory_ID")
+    private GenderCategory genderCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "Discount_ID")
-    private Discount discount;
+    @JoinColumn(name = "SupplierID")
+    private com.poly.admin.model.Supplier supplierID;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.SET_NULL)
+    @JoinColumn(name = "DiscountID")
+    private Discount discountID;
 
     @Size(max = 255)
     @NotNull
@@ -46,18 +47,18 @@ public class Product {
     @Column(name = "Name", nullable = false)
     private String name;
 
-    @Size(max = 255)
-    @Nationalized
-    @Column(name = "Brand")
-    private String brand;
-
     @NotNull
-    @Column(name = "Price", nullable = false, precision = 18, scale = 2)
+    @Column(name = "Price", nullable = false, precision = 10, scale = 2)
     private BigDecimal price;
 
-    @Size(max = 1000)
+    @Size(max = 100)
     @Nationalized
-    @Column(name = "Description", length = 1000)
+    @Column(name = "Brand", length = 100)
+    private String brand;
+
+    @Size(max = 500)
+    @Nationalized
+    @Column(name = "Description", length = 500)
     private String description;
 
     @ColumnDefault("getdate()")

@@ -3,6 +3,7 @@ package com.poly.admin.model;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -12,7 +13,8 @@ import org.hibernate.annotations.Nationalized;
 @Getter
 @Setter
 @Entity
-public class Payment {
+@Table(name = "Gender_Category")
+public class GenderCategory {
     @Id
     @Column(name = "ID", nullable = false)
     private Integer id;
@@ -20,7 +22,7 @@ public class Payment {
     @Size(max = 50)
     @NotNull
     @Nationalized
-    @Column(name = "Payment_method", nullable = false, length = 50)
-    private String paymentMethod;
+    @Column(name = "Name", nullable = false, length = 50)
+    private String name;
 
 }
