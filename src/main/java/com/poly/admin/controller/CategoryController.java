@@ -21,7 +21,7 @@ public class CategoryController {
         return categoryService.getAllGenderCategory();
     }
 
-    @GetMapping("/api/shoe-category/{id}")
+    @GetMapping("/api/shoes-category/{id}")
     public Optional<ShoesCategoryDTO> getShoeCategoryById(@PathVariable("id") Integer id) {
         return categoryService.getShoesCategoryById(id);
     }
