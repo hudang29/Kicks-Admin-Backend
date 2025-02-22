@@ -19,6 +19,6 @@ public class Size {
 
     @NotNull
     @Column(name = "\"Size\"", nullable = false)
-    private Integer size;
+    private String size;
 
 }

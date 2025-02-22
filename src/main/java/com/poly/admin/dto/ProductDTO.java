@@ -10,7 +10,9 @@ import java.math.BigDecimal;
 public class ProductDTO {
     private Integer id;
     private String name;
-    private Integer categoryID;
+    private Integer shoesCategoryID;
+    private Integer GenderCategoryID;
+    private String brand;
     private BigDecimal price;
     private String description;
 }

@@ -16,13 +16,22 @@ public class CategoryController {
     @Autowired
     private CategoryService categoryService;
 
-    @GetMapping("/api/gender-categories")
-    public List<GenderCategory> getAllParentCategories() {
+    @GetMapping("/api/gender-category")
+    public List<GenderCategory> getAllGenderCategory() {
         return categoryService.getAllGenderCategory();
+    }
+    @GetMapping("/api/gender-category/{id}")
+    public Optional<GenderCategory> getGenderCategoryById(@PathVariable Integer id) {
+        return categoryService.getGenderCategoryById(id);
     }
 
     @GetMapping("/api/shoes-category/{id}")
     public Optional<ShoesCategoryDTO> getShoeCategoryById(@PathVariable("id") Integer id) {
         return categoryService.getShoesCategoryById(id);
+    }
+
+    @GetMapping("/api/shoes-categories/{id}")
+    public List<ShoesCategoryDTO> getAllShoeCategoryByGenderCategoryId(@PathVariable("id") Integer id) {
+        return categoryService.getAllShoesCategoryByGenderCategoryId(id);
     }
 }

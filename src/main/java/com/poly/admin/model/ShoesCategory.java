@@ -20,7 +20,7 @@ public class ShoesCategory {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "GenderCategoryID")
+    @JoinColumn(name = "Gender_Category_ID")
     private GenderCategory genderCategory;
 
     @Size(max = 255)

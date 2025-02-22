@@ -18,11 +18,12 @@ public class CategoryService {
     private ShoesCategoryRepo shoesCategoryRepo;
 
     public List<GenderCategory> getAllGenderCategory() {
+
         return genderCategoryRepo.findAll();
     }
 
     public List<ShoesCategoryDTO> getAllShoesCategoryByGenderCategoryId(int id) {
-        return shoesCategoryRepo.findByGenderCategoryID(id)
+        return shoesCategoryRepo.findByGenderCategoryId(id)
                 .stream()
                 .map(category -> new ShoesCategoryDTO(
                         category.getId(),
@@ -39,5 +40,7 @@ public class CategoryService {
         ));
     }
 
-
+    public Optional<GenderCategory> getGenderCategoryById(int id) {
+        return genderCategoryRepo.findById(id);
+    }
 }

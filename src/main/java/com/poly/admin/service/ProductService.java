@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -27,11 +28,26 @@ public class ProductService {
                 .map(product -> new ProductDTO(product.getId(),
                         product.getName(),
                         product.getShoesCategory().getId(),
+                        product.getGenderCategory().getId(),
+                        product.getBrand(),
                         product.getPrice(),
                         product.getDescription())).toList();
     }
 
+    public Optional<ProductDTO> getProductById(int id) {
+        return productRepo.findById(id).map(product -> new ProductDTO(
+                product.getId(),
+                product.getName(),
+                product.getShoesCategory().getId(),
+                product.getGenderCategory().getId(),
+                product.getBrand(),
+                product.getPrice(),
+                product.getDescription()
+        ));
+    }
+
     public String getNameById(int id) {
+
         return productRepo.findNameById(id);
     }
 
@@ -43,16 +59,29 @@ public class ProductService {
                 .stream()
                 .map(productDetail -> new ProductDetailDTO(
                         productDetail.getId(),
-                        productRepo.findNameById(id),
+                        productDetail.getProduct().getId(),
+                        productDetail.getProduct().getName(),
                         productDetail.getColor(),
                         productDetail.getColorDiscount() != null ?
                                 productDetail.getColorDiscount().getId() : null
                 )).toList();
     }
 
+    public Optional<ProductDetailDTO> getDetailById(int id) {
+        return productDetailRepo.findById(id).map(productDetail -> new ProductDetailDTO(
+                productDetail.getId(),
+                productDetail.getProduct().getId(),
+                productDetail.getProduct().getName(),
+                productDetail.getColor(),
+                productDetail.getColorDiscount() != null ?
+                        productDetail.getColorDiscount().getId() : null
+        ));
+    }
+
     /*------ Product size -------*/
 
-    public List<SizeDTO> getAllSizes(int id) {
+    public List<SizeDTO> getAllSizeByProductDetailId(int id) {
+        System.out.println(id);
         return productSizeRepo.findByProductDetail_Id(id)
                 .stream()
                 .map(size -> new SizeDTO(

@@ -23,23 +23,23 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "ShoesCategory_ID")
+    @JoinColumn(name = "Shoes_Category_ID")
     private com.poly.admin.model.ShoesCategory shoesCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "GenderCategory_ID")
+    @JoinColumn(name = "Gender_Category_ID")
     private GenderCategory genderCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "SupplierID")
-    private com.poly.admin.model.Supplier supplierID;
+    @JoinColumn(name = "Supplier_ID")
+    private Supplier supplier;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "DiscountID")
-    private Discount discountID;
+    @JoinColumn(name = "Discount_ID")
+    private Discount discount;
 
     @Size(max = 255)
     @NotNull

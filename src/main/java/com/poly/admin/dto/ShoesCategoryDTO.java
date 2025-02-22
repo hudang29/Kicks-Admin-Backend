@@ -11,6 +11,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class ShoesCategoryDTO {
     private Integer id;
-    private Integer ParentCategoryID;
+    private Integer GenderCategoryID;
     private String name;
 }

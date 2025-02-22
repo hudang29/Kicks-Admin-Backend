@@ -11,6 +11,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class SizeDTO {
     private Integer id;
+    //private Integer ;
     private Integer size;
     private Integer stock;
 }
