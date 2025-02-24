@@ -29,7 +29,7 @@ public class Product {
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "Shoes_Category_ID")
-    private com.poly.admin.model.ShoesCategory shoesCategory;
+    private ShoesCategory shoesCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
@@ -64,5 +64,4 @@ public class Product {
     @ColumnDefault("getdate()")
     @Column(name = "Create_at")
     private Instant createAt;
-
 }

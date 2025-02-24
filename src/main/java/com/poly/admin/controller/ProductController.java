@@ -39,11 +39,4 @@ public class ProductController {
     public Optional<ProductDetailDTO> showDetail(@PathVariable("id") Integer id) {
         return productService.getDetailById(id);
     }
-
-    /*------ Size -------*/
-    @GetMapping("/api/sizes/{id}")
-    public List<SizeDTO> getSizes(@PathVariable("id") Integer id) {
-        return productService.getAllSizeByProductDetailId(id);
-    }
-
 }

@@ -1,5 +1,6 @@
 package com.poly.admin.controller;
 
+import com.poly.admin.dto.SizeDTO;
 import com.poly.admin.model.SizeSample;
 import com.poly.admin.service.SizeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,5 +26,13 @@ public class SizeController {
     public void sizeSampleDelete(@PathVariable Integer id) {
         sizeService.deleteSizeSample(id);
     }
+
+    /*------ Size -------*/
+
+    @GetMapping("/api/sizes/{id}")
+    public List<SizeDTO> getProductSizes(@PathVariable("id") Integer id) {
+        return sizeService.getAllSizeByProductDetailId(id);
+    }
+
 
 }

@@ -15,4 +15,5 @@ public class ProductDetailDTO {
     private String name;
     private String color;
     private Integer discountId;
+    private Boolean isDefault;
 }
