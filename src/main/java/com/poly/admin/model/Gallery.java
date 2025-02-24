@@ -19,6 +19,7 @@ import org.hibernate.annotations.OnDeleteAction;
 @Entity
 public class Gallery {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
     private Integer id;
 
