@@ -3,7 +3,9 @@ package com.poly.admin.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
@@ -13,6 +15,8 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "Order_detail")
 public class OrderDetail {
@@ -35,7 +39,7 @@ public class OrderDetail {
     private BigDecimal price;
 
     @Column(name = "\"Size\"")
-    private Integer size;
+    private String size;
 
     @Size(max = 50)
     @Nationalized

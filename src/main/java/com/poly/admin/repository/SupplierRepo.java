@@ -1,9 +1,9 @@
 package com.poly.admin.repository;
 
-import com.poly.admin.model.SizeSample;
+import com.poly.admin.model.Supplier;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SizeRepo extends JpaRepository<SizeSample, Integer> {
+public interface SupplierRepo extends JpaRepository<Supplier, Integer> {
 }

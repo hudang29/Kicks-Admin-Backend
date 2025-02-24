@@ -1,9 +1,10 @@
 package com.poly.admin.repository;
 
-import com.poly.admin.model.SizeSample;
+import com.poly.admin.model.ProductDiscount;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SizeRepo extends JpaRepository<SizeSample, Integer> {
+public interface DiscountRepo extends JpaRepository<ProductDiscount, Integer> {
+
 }

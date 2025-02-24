@@ -3,8 +3,8 @@ package com.poly.admin.service;
 import com.poly.admin.dto.ProductDTO;
 import com.poly.admin.dto.ProductDetailDTO;
 import com.poly.admin.dto.SizeDTO;
-import com.poly.admin.model.Product;
-import com.poly.admin.model.ProductDetail;
+import com.poly.admin.model.ProductDiscount;
+import com.poly.admin.repository.DiscountRepo;
 import com.poly.admin.repository.ProductDetailRepo;
 import com.poly.admin.repository.ProductRepo;
 import com.poly.admin.repository.ProductSizeRepo;
@@ -22,6 +22,8 @@ public class ProductService {
     private ProductDetailRepo productDetailRepo;
     @Autowired
     private ProductSizeRepo productSizeRepo;
+    @Autowired
+    private DiscountRepo discountRepo;
 
     public List<ProductDTO> getAllProducts() {
         return productRepo.findAll().stream()
@@ -29,6 +31,7 @@ public class ProductService {
                         product.getName(),
                         product.getShoesCategory().getId(),
                         product.getGenderCategory().getId(),
+                        product.getSupplier().getId(),
                         product.getBrand(),
                         product.getPrice(),
                         product.getDescription())).toList();
@@ -40,6 +43,7 @@ public class ProductService {
                 product.getName(),
                 product.getShoesCategory().getId(),
                 product.getGenderCategory().getId(),
+                product.getSupplier().getId(),
                 product.getBrand(),
                 product.getPrice(),
                 product.getDescription()
@@ -62,8 +66,8 @@ public class ProductService {
                         productDetail.getProduct().getId(),
                         productDetail.getProduct().getName(),
                         productDetail.getColor(),
-                        productDetail.getColorDiscount() != null ?
-                                productDetail.getColorDiscount().getId() : null
+                        productDetail.getProductDiscount() != null ?
+                                productDetail.getProductDiscount().getId() : null
                 )).toList();
     }
 
@@ -73,8 +77,8 @@ public class ProductService {
                 productDetail.getProduct().getId(),
                 productDetail.getProduct().getName(),
                 productDetail.getColor(),
-                productDetail.getColorDiscount() != null ?
-                        productDetail.getColorDiscount().getId() : null
+                productDetail.getProductDiscount() != null ?
+                        productDetail.getProductDiscount().getId() : null
         ));
     }
 

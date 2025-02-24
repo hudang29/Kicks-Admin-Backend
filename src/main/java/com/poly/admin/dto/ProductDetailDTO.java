@@ -1,6 +1,5 @@
 package com.poly.admin.dto;
 
-import com.poly.admin.model.Discount;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

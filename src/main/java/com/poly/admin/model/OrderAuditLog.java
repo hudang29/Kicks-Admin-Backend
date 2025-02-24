@@ -5,7 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
@@ -14,6 +16,8 @@ import java.time.Instant;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class OrderAuditLog {
     @Id
@@ -26,7 +30,7 @@ public class OrderAuditLog {
     private String type;
 
     @ColumnDefault("getdate()")
-    @Column(name = "\"Timestamp\"")
+    @Column(name = "\"Time_stamp\"")
     private Instant timestamp;
 
     @Nationalized
@@ -41,7 +45,7 @@ public class OrderAuditLog {
 
     @Size(max = 255)
     @Nationalized
-    @Column(name = "CreatedBy")
-    private String createdBy;
+    @Column(name = "Edit_By")
+    private String editBy;
 
 }

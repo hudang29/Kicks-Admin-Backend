@@ -12,6 +12,7 @@ public class ProductDTO {
     private String name;
     private Integer shoesCategoryID;
     private Integer GenderCategoryID;
+    private Integer SupplierID;
     private String brand;
     private BigDecimal price;
     private String description;

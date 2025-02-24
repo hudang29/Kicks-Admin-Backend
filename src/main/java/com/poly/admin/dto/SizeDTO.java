@@ -12,6 +12,6 @@ import lombok.Setter;
 public class SizeDTO {
     private Integer id;
     //private Integer ;
-    private Integer size;
+    private String size;
     private Integer stock;
 }

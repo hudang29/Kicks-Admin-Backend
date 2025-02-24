@@ -3,7 +3,9 @@ package com.poly.admin.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
@@ -15,6 +17,8 @@ import java.time.Instant;
 
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Entity
 public class Product {
     @Id
@@ -35,11 +39,6 @@ public class Product {
     @OnDelete(action = OnDeleteAction.SET_NULL)
     @JoinColumn(name = "Supplier_ID")
     private Supplier supplier;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "Discount_ID")
-    private Discount discount;
 
     @Size(max = 255)
     @NotNull

@@ -26,7 +26,7 @@ public class DiscountAuditLog {
     private String type;
 
     @ColumnDefault("getdate()")
-    @Column(name = "\"Timestamp\"")
+    @Column(name = "\"Time_stamp\"")
     private Instant timestamp;
 
     @Nationalized
@@ -41,7 +41,7 @@ public class DiscountAuditLog {
 
     @Size(max = 255)
     @Nationalized
-    @Column(name = "CreatedBy")
-    private String createdBy;
+    @Column(name = "Edit_By")
+    private String editBy;
 
 }
