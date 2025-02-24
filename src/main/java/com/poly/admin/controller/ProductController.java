@@ -5,9 +5,7 @@ import com.poly.admin.dto.ProductDetailDTO;
 import com.poly.admin.dto.SizeDTO;
 import com.poly.admin.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -28,6 +26,11 @@ public class ProductController {
         return productService.getProductById(id);
     }
 
+    @PutMapping("/api/product-update")
+    public void updateProduct(@RequestBody ProductDTO productDTO) {
+        productService.addOrUpdateProduct(productDTO);
+    }
+
     /*------ Product detail -------*/
 
     @GetMapping("/api/list-product-detail/{id}")
@@ -38,5 +41,9 @@ public class ProductController {
     @GetMapping("/api/product-detail/{id}")
     public Optional<ProductDetailDTO> showDetail(@PathVariable("id") Integer id) {
         return productService.getDetailById(id);
+    }
+    @PutMapping("/api/product-detail-update")
+    public void updateDetail(@RequestBody ProductDetailDTO productDetailDTO) {
+        productService.addOrUpdateProductDetail(productDetailDTO);
     }
 }
