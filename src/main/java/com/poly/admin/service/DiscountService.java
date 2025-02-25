@@ -15,4 +15,10 @@ public class DiscountService {
     public List<ProductDiscount> getAllColorDiscount() {
         return discountRepo.findAll();
     }
+
+    public ProductDiscount getProductDiscountById(int id) {
+        return discountRepo.findById(id).orElseThrow(
+                () -> new RuntimeException("Product discount not found")
+        );
+    }
 }

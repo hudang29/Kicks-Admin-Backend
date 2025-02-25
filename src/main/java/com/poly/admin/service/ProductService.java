@@ -116,8 +116,7 @@ public class ProductService {
                         productDetail.getProduct().getName(),
                         productDetail.getColor(),
                         productDetail.getProductDiscount() != null ?
-                                productDetail.getProductDiscount().getId() : null,
-                        productDetail.getIsDefault()
+                                productDetail.getProductDiscount().getId() : null
                 )).toList();
     }
 
@@ -128,8 +127,7 @@ public class ProductService {
                 productDetail.getProduct().getName(),
                 productDetail.getColor(),
                 productDetail.getProductDiscount() != null ?
-                        productDetail.getProductDiscount().getId() : null,
-                productDetail.getIsDefault()
+                        productDetail.getProductDiscount().getId() : null
         ));
     }
 
@@ -152,12 +150,11 @@ public class ProductService {
         productDetail.setColor(productDetailDTO.getColor());
 
         Optional<ProductDiscount> optionalDiscount = discountRepo.findById(discountId);
-        if (optionalDiscount.isPresent()) {
-            productDetail.setProductDiscount(optionalDiscount.get());
+        if (optionalDiscount.isPresent()) {            productDetail.setProductDiscount(optionalDiscount.get());
         } else {
             productDetail.setProductDiscount(null);
         }
-        productDetail.setIsDefault(productDetailDTO.getIsDefault());
+        productDetail.setIsDefault(false);
 
         productDetailRepo.save(productDetail);
     }

@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,5 +17,5 @@ public class ProductDetailDTO {
     private String name;
     private String color;
     private Integer discountId;
-    private Boolean isDefault;
+    //private BigDecimal salePrice;
 }
