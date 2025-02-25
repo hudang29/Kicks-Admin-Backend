@@ -2,6 +2,7 @@ package com.poly.admin.controller;
 
 import com.poly.admin.dto.ProductDTO;
 import com.poly.admin.dto.ProductDetailDTO;
+import com.poly.admin.dto.UpdateProductDetail;
 import com.poly.admin.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,6 +62,17 @@ public class ProductController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Lỗi khi cập nhật chi tiết sản phẩm: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/api/product-detail-create")
+    public ResponseEntity<?> createDetail(@RequestBody UpdateProductDetail updateData) {
+        try {
+            productService.UpdateProductDetail(updateData);
+            return ResponseEntity.ok("thêm chi tiết sản phẩm thành công!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Lỗi khi thêm chi tiết sản phẩm: " + e.getMessage());
         }
     }
 

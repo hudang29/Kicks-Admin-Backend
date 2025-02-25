@@ -37,7 +37,7 @@ public class SizeController {
         return sizeService.getAllSizeByProductDetailId(id);
     }
 
-    @PutMapping("/api/sizes/update/{id}")
+    @PutMapping("/api/sizes/update/{productDetailId}")
     public ResponseEntity<?> updateSizes(@PathVariable Integer id, @RequestBody List<SizeDTO> sizeDTOList) {
         try {
             sizeService.addOrUpdateSizeList(sizeDTOList, id);

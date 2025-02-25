@@ -1,9 +1,7 @@
 package com.poly.admin.service;
 
-import com.poly.admin.dto.ProductDTO;
-import com.poly.admin.dto.ProductDetailDTO;
-import com.poly.admin.dto.ShoesCategoryDTO;
-import com.poly.admin.dto.SizeDTO;
+import com.poly.admin.dto.*;
+import com.poly.admin.dto.UpdateProductDetail;
 import com.poly.admin.model.*;
 import com.poly.admin.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,10 +148,25 @@ public class ProductService {
         productDetail.setColor(productDetailDTO.getColor());
 
         Optional<ProductDiscount> optionalDiscount = discountRepo.findById(discountId);
-        if (optionalDiscount.isPresent()) {            productDetail.setProductDiscount(optionalDiscount.get());
+        if (optionalDiscount.isPresent()) {
+            productDetail.setProductDiscount(optionalDiscount.get());
         } else {
             productDetail.setProductDiscount(null);
         }
+        productDetail.setIsDefault(false);
+
+        productDetailRepo.save(productDetail);
+    }
+    public void UpdateProductDetail(UpdateProductDetail updateData) {
+        Integer productId = updateData.getProductId();
+
+        ProductDetail productDetail = new ProductDetail();
+
+        Product product = productRepo.findById(productId)
+                .orElseThrow(() -> new RuntimeException("Product is null"));
+        productDetail.setProduct(product);
+        productDetail.setColor(updateData.getColor());
+        productDetail.setProductDiscount(null);
         productDetail.setIsDefault(false);
 
         productDetailRepo.save(productDetail);
