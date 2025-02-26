@@ -2,7 +2,7 @@ package com.poly.admin.controller;
 
 import com.poly.admin.dto.ProductDTO;
 import com.poly.admin.dto.ProductDetailDTO;
-import com.poly.admin.dto.UpdateProductDetail;
+import com.poly.admin.model.Product;
 import com.poly.admin.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,6 +40,18 @@ public class ProductController {
         }
     }
 
+    @PostMapping("/api/product-create")
+    public ResponseEntity<?> createProduct(@RequestBody ProductDTO productDTO) {
+        try {
+            Product newProduct = productService.addOrUpdateProduct(productDTO);
+            System.out.println("Thêm sản phẩm thành công!");
+            return ResponseEntity.ok(newProduct); // Trả về phản hồi thành công
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Lỗi Thêm sản phẩm: " + e.getMessage()); // Trả về thông báo lỗi chi tiết
+        }
+    }
+
 
     /*------ Product detail -------*/
 
@@ -56,7 +68,7 @@ public class ProductController {
     @PutMapping("/api/product-detail-update")
     public ResponseEntity<?> updateDetail(@RequestBody ProductDetailDTO productDetailDTO) {
         try {
-            productService.addOrUpdateProductDetail(productDetailDTO);
+            productService.addProductDetail(productDetailDTO);
             System.out.println("Cập nhật chi tiết sản phẩm thành công!");
             return ResponseEntity.ok("Cập nhật chi tiết sản phẩm thành công!");
         } catch (Exception e) {
@@ -66,9 +78,9 @@ public class ProductController {
     }
 
     @PostMapping("/api/product-detail-create")
-    public ResponseEntity<?> createDetail(@RequestBody UpdateProductDetail updateData) {
+    public ResponseEntity<?> createDetail(@RequestBody ProductDetailDTO updateData) {
         try {
-            productService.UpdateProductDetail(updateData);
+            productService.updateProductDetail(updateData);
             return ResponseEntity.ok("thêm chi tiết sản phẩm thành công!");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

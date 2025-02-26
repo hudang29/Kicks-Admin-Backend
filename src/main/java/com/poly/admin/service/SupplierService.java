@@ -17,7 +17,9 @@ public class SupplierService {
         return supplierRepo.findAll();
     }
 
-    public Optional<Supplier> getSupplierById(int id) {
-        return supplierRepo.findById(id);
+    public Supplier getSupplierById(int id) {
+        return supplierRepo.findById(id).orElseThrow(
+                () -> new RuntimeException("Supplier not found")
+        );
     }
 }

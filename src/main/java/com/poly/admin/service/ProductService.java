@@ -1,7 +1,6 @@
 package com.poly.admin.service;
 
 import com.poly.admin.dto.*;
-import com.poly.admin.dto.UpdateProductDetail;
 import com.poly.admin.model.*;
 import com.poly.admin.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +57,7 @@ public class ProductService {
         return productRepo.findNameById(id);
     }
 
-    public void addOrUpdateProduct(ProductDTO productDTO) {
+    public Product addOrUpdateProduct(ProductDTO productDTO) {
 
         Integer supplierId = productDTO.getSupplierID();
         Integer genderCategoryId = productDTO.getGenderCategoryID();
@@ -99,7 +98,7 @@ public class ProductService {
             product.setCreateAt(Instant.now());
         }
 
-        productRepo.save(product);
+        return productRepo.save(product);
     }
 
 
@@ -129,7 +128,7 @@ public class ProductService {
         ));
     }
 
-    public void addOrUpdateProductDetail(ProductDetailDTO productDetailDTO) {
+    public void addProductDetail(ProductDetailDTO productDetailDTO) {
         Integer productId = productDetailDTO.getProductId();
         Integer discountId = productDetailDTO.getDiscountId();
         Integer productDetailId = productDetailDTO.getId();
@@ -157,7 +156,7 @@ public class ProductService {
 
         productDetailRepo.save(productDetail);
     }
-    public void UpdateProductDetail(UpdateProductDetail updateData) {
+    public void updateProductDetail(ProductDetailDTO updateData) {
         Integer productId = updateData.getProductId();
 
         ProductDetail productDetail = new ProductDetail();

@@ -20,8 +20,9 @@ public class CategoryController {
     public List<GenderCategory> getAllGenderCategory() {
         return categoryService.getAllGenderCategory();
     }
+
     @GetMapping("/api/gender-category/{id}")
-    public Optional<GenderCategory> getGenderCategoryById(@PathVariable Integer id) {
+    public GenderCategory getGenderCategoryById(@PathVariable Integer id) {
         return categoryService.getGenderCategoryById(id);
     }
 

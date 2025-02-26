@@ -1,10 +1,7 @@
 package com.poly.admin.dto;
 
 import jakarta.annotation.Nullable;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
@@ -19,4 +16,9 @@ public class ProductDetailDTO {
     private String color;
     private Integer discountId;
     //private BigDecimal salePrice;
+
+    ProductDetailDTO(String color, Integer productId) {
+        this.color = color;
+        this.productId = productId;
+    }
 }

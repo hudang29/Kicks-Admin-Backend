@@ -38,14 +38,28 @@ public class SizeController {
     }
 
     @PutMapping("/api/sizes/update/{productDetailId}")
-    public ResponseEntity<?> updateSizes(@PathVariable Integer id, @RequestBody List<SizeDTO> sizeDTOList) {
+    public ResponseEntity<?> updateSizes(@PathVariable Integer productDetailId,
+                                         @RequestBody List<SizeDTO> sizeDTOList) {
         try {
-            sizeService.addOrUpdateSizeList(sizeDTOList, id);
+            sizeService.addOrUpdateSizeList(sizeDTOList, productDetailId);
             System.out.println("Cập nhật size phẩm thành công!");
             return ResponseEntity.ok("Cập nhật size thành công!");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Lỗi khi cập nhật size: " + e.getMessage());
+        }
+    }
+
+    @PostMapping("/api/sizes/create/{productDetailId}")
+    public ResponseEntity<?> createSizes(@PathVariable Integer productDetailId,
+                                         @RequestBody List<SizeDTO> sizeDTOList) {
+        try {
+            sizeService.addOrUpdateSizeList(sizeDTOList, productDetailId);
+            System.out.println("Tạo size phẩm thành công!");
+            return ResponseEntity.ok("Create size thành công!");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Create size (backend): " + e.getMessage());
         }
     }
 

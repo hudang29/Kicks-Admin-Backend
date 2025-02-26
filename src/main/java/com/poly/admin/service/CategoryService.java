@@ -40,7 +40,10 @@ public class CategoryService {
         ));
     }
 
-    public Optional<GenderCategory> getGenderCategoryById(int id) {
-        return genderCategoryRepo.findById(id);
+    public GenderCategory getGenderCategoryById(int id) {
+
+        return genderCategoryRepo.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("Gender Category Not Found")
+        );
     }
 }
