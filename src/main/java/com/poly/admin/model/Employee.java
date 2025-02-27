@@ -59,4 +59,18 @@ public class Employee {
     @Column(name = "Status")
     private Boolean status;
 
+    public Employee(Integer id, String name, String email, String phone,
+                    String role, String address) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.role = role;
+        this.address = address;
+    }
+
+    public Employee(Integer id, Boolean status) {
+        this.id = id;
+        this.status = status;
+    }
 }
