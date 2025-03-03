@@ -25,7 +25,7 @@ public class ProductDetail {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "Product_ID")
+    @JoinColumn(name = "Product")
     private Product product;
 
     @Size(max = 50)
@@ -35,7 +35,7 @@ public class ProductDetail {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "Product_discount_ID")
+    @JoinColumn(name = "Product_discount")
     private ProductDiscount productDiscount;
 
     @ColumnDefault("0")

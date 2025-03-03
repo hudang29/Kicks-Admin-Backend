@@ -10,6 +10,8 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
+import java.time.Instant;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,12 +28,6 @@ public class Employee {
     @Nationalized
     @Column(name = "Name", nullable = false)
     private String name;
-
-    @Size(max = 255)
-    @NotNull
-    @Nationalized
-    @Column(name = "Password", nullable = false)
-    private String password;
 
     @Size(max = 255)
     @NotNull
@@ -58,6 +54,25 @@ public class Employee {
     @ColumnDefault("1")
     @Column(name = "Status")
     private Boolean status;
+
+    @ColumnDefault("getdate()")
+    @Column(name = "Create_at")
+    private Instant createAt;
+
+    @Size(max = 100)
+    @Nationalized
+    @Column(name = "City", length = 100)
+    private String city;
+
+    @Size(max = 100)
+    @Nationalized
+    @Column(name = "District", length = 100)
+    private String district;
+
+    @Size(max = 100)
+    @Nationalized
+    @Column(name = "Ward", length = 100)
+    private String ward;
 
     public Employee(Integer id, String name, String email, String phone,
                     String role, String address) {

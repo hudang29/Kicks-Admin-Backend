@@ -32,8 +32,8 @@ public class SizeController {
 
     /*------ Size -------*/
 
-    @GetMapping("/api/sizes/{id}")
-    public List<SizeDTO> getProductSizes(@PathVariable("id") Integer id) {
+    @GetMapping("/api/sizes/{productDetailId}")
+    public List<SizeDTO> getProductSizes(@PathVariable("productDetailId") Integer id) {
         return sizeService.getAllSizeByProductDetailId(id);
     }
 

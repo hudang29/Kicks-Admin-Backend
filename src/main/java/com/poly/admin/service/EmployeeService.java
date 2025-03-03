@@ -22,7 +22,8 @@ public class EmployeeService {
                         employee.getEmail(),
                         employee.getPhone(),
                         employee.getRole(),
-                        employee.getStatus()
+                        employee.getStatus(),
+                        employee.getCreateAt()
                 )).toList();
     }
 
@@ -39,7 +40,8 @@ public class EmployeeService {
                 employee.getPhone(),
                 employee.getAddress(),
                 employee.getRole(),
-                employee.getStatus()
+                employee.getStatus(),
+                employee.getCreateAt()
         )).orElseThrow(() -> new RuntimeException("Employee not found"));
     }
 
@@ -51,8 +53,6 @@ public class EmployeeService {
                     () -> new RuntimeException("Employee not found"));
         } else {
             employee = new Employee();
-            employee.setPassword(employeeData.getPassword());
-
         }
 
         employee.setName(employeeData.getName());

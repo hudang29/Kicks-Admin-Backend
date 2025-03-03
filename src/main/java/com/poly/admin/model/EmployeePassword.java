@@ -3,35 +3,39 @@ package com.poly.admin.model;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
+import java.time.Instant;
+
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-@Table(name = "Shoes_Category")
-public class ShoesCategory {
+@Table(name = "Employee_password")
+public class EmployeePassword {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "Gender_Category")
-    private GenderCategory genderCategory;
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
+    @JoinColumn(name = "Employee", nullable = false)
+    private Employee employee;
 
     @Size(max = 255)
     @NotNull
     @Nationalized
-    @Column(name = "Name", nullable = false)
-    private String name;
+    @Column(name = "Hashed_Password", nullable = false)
+    private String hashedPassword;
+
+    @ColumnDefault("getdate()")
+    @Column(name = "Create_at")
+    private Instant createAt;
 
 }

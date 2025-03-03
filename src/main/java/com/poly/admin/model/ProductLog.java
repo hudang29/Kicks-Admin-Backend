@@ -2,9 +2,7 @@ package com.poly.admin.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
@@ -13,10 +11,9 @@ import java.time.Instant;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 @Entity
-public class OrderAuditLog {
+@Table(name = "Product_Log")
+public class ProductLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
@@ -28,8 +25,8 @@ public class OrderAuditLog {
     private String type;
 
     @ColumnDefault("getdate()")
-    @Column(name = "\"Time_stamp\"")
-    private Instant timestamp;
+    @Column(name = "Time_stamp")
+    private Instant timeStamp;
 
     @Nationalized
     @Lob
@@ -41,9 +38,9 @@ public class OrderAuditLog {
     @Column(name = "New_data")
     private String newData;
 
-    @Size(max = 255)
+    @Size(max = 100)
     @Nationalized
-    @Column(name = "Edit_By")
+    @Column(name = "Edit_by", length = 100)
     private String editBy;
 
 }

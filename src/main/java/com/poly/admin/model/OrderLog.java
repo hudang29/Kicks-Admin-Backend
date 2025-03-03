@@ -12,7 +12,8 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-public class DiscountAuditLog {
+@Table(name = "Order_Log")
+public class OrderLog {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false)
@@ -24,8 +25,8 @@ public class DiscountAuditLog {
     private String type;
 
     @ColumnDefault("getdate()")
-    @Column(name = "\"Time_stamp\"")
-    private Instant timestamp;
+    @Column(name = "Time_stamp")
+    private Instant timeStamp;
 
     @Nationalized
     @Lob
@@ -37,9 +38,9 @@ public class DiscountAuditLog {
     @Column(name = "New_data")
     private String newData;
 
-    @Size(max = 255)
+    @Size(max = 100)
     @Nationalized
-    @Column(name = "Edit_By")
+    @Column(name = "Edit_by", length = 100)
     private String editBy;
 
 }

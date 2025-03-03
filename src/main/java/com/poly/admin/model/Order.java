@@ -29,22 +29,22 @@ public class Order {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "Customer_ID")
+    @JoinColumn(name = "Customer")
     private Customer customer;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "Employee_ID")
+    @JoinColumn(name = "Employee")
     private Employee employee;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "Payment_ID")
+    @JoinColumn(name = "Payment")
     private Payment payment;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "Coupon_ID")
+    @JoinColumn(name = "Coupon")
     private Coupon coupon;
 
     @Size(max = 255)

@@ -25,12 +25,4 @@ public class ProductDiscount {
     @Column(name = "Discount_rate", precision = 5, scale = 2)
     private BigDecimal discountRate;
 
-    @NotNull
-    @Column(name = "Start_Date", nullable = false)
-    private LocalDate startDate;
-
-    @NotNull
-    @Column(name = "End_Date", nullable = false)
-    private LocalDate endDate;
-
 }

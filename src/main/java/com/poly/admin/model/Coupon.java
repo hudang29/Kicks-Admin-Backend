@@ -11,6 +11,7 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Nationalized;
 
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.time.LocalDate;
 
 @Getter
@@ -53,8 +54,12 @@ public class Coupon {
     @Column(name = "End_Date", nullable = false)
     private LocalDate endDate;
 
-    @ColumnDefault("1")
-    @Column(name = "Limit")
-    private Boolean limit;
+    @ColumnDefault("20")
+    @Column(name = "Usage_Limit")
+    private Integer usageLimit;
+
+    @ColumnDefault("getdate()")
+    @Column(name = "Created_at")
+    private Instant createdAt;
 
 }

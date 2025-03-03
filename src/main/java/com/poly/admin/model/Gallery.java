@@ -25,7 +25,7 @@ public class Gallery {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "Product_detail_ID")
+    @JoinColumn(name = "Product_detail")
     private ProductDetail productDetail;
 
     @Size(max = 255)

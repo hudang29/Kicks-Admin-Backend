@@ -28,17 +28,17 @@ public class Product {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "Shoes_Category_ID")
+    @JoinColumn(name = "Shoes_Category")
     private ShoesCategory shoesCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "Gender_Category_ID")
+    @JoinColumn(name = "Gender_Category")
     private GenderCategory genderCategory;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)
-    @JoinColumn(name = "Supplier_ID")
+    @JoinColumn(name = "Supplier")
     private Supplier supplier;
 
     @Size(max = 255)

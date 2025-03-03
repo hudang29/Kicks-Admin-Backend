@@ -1,6 +1,7 @@
 package com.poly.admin.model;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,6 +10,8 @@ import lombok.Setter;
 import org.hibernate.annotations.Nationalized;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+
+import java.math.BigDecimal;
 
 @Getter
 @Setter
@@ -41,5 +44,9 @@ public class Cart {
 
     @Column(name = "Quantity")
     private Integer quantity;
+
+    @NotNull
+    @Column(name = "Price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal price;
 
 }
