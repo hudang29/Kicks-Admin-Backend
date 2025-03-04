@@ -38,4 +38,9 @@ public class Gallery {
     @Column(name = "Is_default")
     private Boolean isDefault;
 
+    public Gallery(ProductDetail productDetail, String image, Boolean isDefault) {
+        this.productDetail = productDetail;
+        this.image = image;
+        this.isDefault = isDefault;
+    }
 }

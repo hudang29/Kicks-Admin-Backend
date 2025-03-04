@@ -14,4 +14,9 @@ public class GalleryDTO {
     private String image;
     private Integer productDetailID;
     private Boolean isDefault;
+
+    public GalleryDTO(String image, Integer productDetailID) {
+        this.image = image;
+        this.productDetailID = productDetailID;
+    }
 }
