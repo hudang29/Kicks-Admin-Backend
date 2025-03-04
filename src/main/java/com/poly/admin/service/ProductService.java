@@ -110,10 +110,10 @@ public class ProductService {
                 .map(productDetail -> new ProductDetailDTO(
                         productDetail.getId(),
                         productDetail.getProduct().getId(),
-                        productDetail.getProduct().getName(),
                         productDetail.getColor(),
                         productDetail.getProductDiscount() != null ?
-                                productDetail.getProductDiscount().getId() : null
+                                productDetail.getProductDiscount().getId() : null,
+                        productDetail.getIsDefault()
                 )).toList();
     }
 
@@ -121,10 +121,10 @@ public class ProductService {
         return productDetailRepo.findById(id).map(productDetail -> new ProductDetailDTO(
                 productDetail.getId(),
                 productDetail.getProduct().getId(),
-                productDetail.getProduct().getName(),
                 productDetail.getColor(),
                 productDetail.getProductDiscount() != null ?
-                        productDetail.getProductDiscount().getId() : null
+                        productDetail.getProductDiscount().getId() : null,
+                productDetail.getIsDefault()
         ));
     }
 
@@ -166,7 +166,7 @@ public class ProductService {
         productDetail.setProduct(product);
         productDetail.setColor(updateData.getColor());
         productDetail.setProductDiscount(null);
-        productDetail.setIsDefault(false);
+        //productDetail.setIsDefault(false);
 
         productDetailRepo.save(productDetail);
     }

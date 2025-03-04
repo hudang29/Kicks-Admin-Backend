@@ -12,16 +12,13 @@ import java.util.Optional;
 @Repository
 public interface GalleryRepo extends JpaRepository<Gallery, Integer> {
 
-    @Override
-    Optional<Gallery> findById(Integer integer);
-
     List<Gallery> findByProductDetail_IdOrderByIsDefaultDesc(Integer id);
 
     @Query("""
              SELECT g.image FROM Gallery g
              JOIN ProductDetail d ON d.id = g.productDetail.id
              JOIN Product p ON p.id = d.product.id
-             WHERE p.id = :id AND d.isDefault = true AND g.isDefault = true
+             WHERE p.id = :id AND d.isDefault = TRUE AND g.isDefault = TRUE
             """)
     List<String> findImageIsDefaultByProductId(@Param("id") Integer id);
 

@@ -55,8 +55,8 @@ public class ProductController {
 
     /*------ Product detail -------*/
 
-    @GetMapping("/api/list-product-detail/{id}")
-    public List<ProductDetailDTO> showProductDetailByProductID(@PathVariable("id") Integer id) {
+    @GetMapping("/api/list-product-detail/{productId}")
+    public List<ProductDetailDTO> showProductDetailByProductID(@PathVariable("productId") Integer id) {
         return productService.getDetailByProductId(id);
     }
 
