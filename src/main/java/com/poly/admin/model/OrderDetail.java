@@ -27,8 +27,8 @@ public class OrderDetail {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    @JoinColumn(name = "Order")
-    private Order order;
+    @JoinColumn(name = "Orders")
+    private Orders orders;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @OnDelete(action = OnDeleteAction.SET_NULL)

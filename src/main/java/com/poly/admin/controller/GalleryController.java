@@ -33,8 +33,8 @@ public class GalleryController {
     @PostMapping("/api/add-gallery")
     public ResponseEntity<?> addGallery(@RequestBody GalleryDTO galleryDTO) {
         try {
-            Gallery gallery = galleryService.addGallery(galleryDTO);
-            return ResponseEntity.ok(gallery);
+            galleryService.addGallery(galleryDTO);
+            return ResponseEntity.ok("Thêm ảnh thành công!");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }

@@ -49,15 +49,14 @@ public class GalleryService {
         return imgList.isEmpty() ? null : imgList.getFirst();
     }
 
-    public Gallery addGallery(GalleryDTO galleryDTO) {
+    public void addGallery(GalleryDTO galleryDTO) {
 
         Integer productDetailId = galleryDTO.getProductDetailID();
 
         ProductDetail productDetail = productDetailRepo.findById(productDetailId).orElseThrow(
-                () -> new RuntimeException("Product detail not found")
-        );
+                () -> new RuntimeException("Product detail not found"));
         Gallery gallery = new Gallery(productDetail, galleryDTO.getImage(), false );
-        return galleryRepo.save(gallery);
+        galleryRepo.save(gallery);
     }
 
 }
