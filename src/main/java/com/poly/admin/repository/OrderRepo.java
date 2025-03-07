@@ -138,7 +138,7 @@ public interface OrderRepo extends JpaRepository<Orders, Integer> {
 //                WHEN o.orderStatus = :status
 //                o.orderDate DESC
 //            """)
-    List<Orders> findAllByOrderStatusEqualsIgnoreCaseOrderByOrderDateDesc(@Size(max = 50) String orderStatus);
+    List<Orders> findAllByOrderStatusEqualsIgnoreCaseOrderByOrderDateAsc(@Size(max = 50) String orderStatus);
 
 
 }

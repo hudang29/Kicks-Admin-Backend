@@ -29,7 +29,7 @@ public class OrderService {
     }
 
     public List<OrderDTO> getOrdersByStatus(String status) {
-        return orderRepo.findAllByOrderStatusEqualsIgnoreCaseOrderByOrderDateDesc(status)
+        return orderRepo.findAllByOrderStatusEqualsIgnoreCaseOrderByOrderDateAsc(status)
                 .stream()
                 .map(order -> new OrderDTO(
                         order.getId(),

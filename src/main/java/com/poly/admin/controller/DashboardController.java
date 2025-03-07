@@ -59,7 +59,7 @@ public class DashboardController {
     // Ex:http://localhost:8080/api/dashboard/get-low-stock?threshold=5
     @GetMapping("/get-low-stock")
     public ResponseEntity<List<LowStockProductDTO>> getLowStockProducts(
-            @RequestParam(defaultValue = "10") int threshold) {
+            @RequestParam(defaultValue = "6") int threshold) {
         List<LowStockProductDTO> lowStockProducts = dashboardService.getLowStockProducts(threshold);
         return ResponseEntity.ok(lowStockProducts);
     }

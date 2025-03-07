@@ -3,6 +3,7 @@ package com.poly.admin.controller;
 import com.poly.admin.dto.ProductDTO;
 import com.poly.admin.dto.ProductDetailDTO;
 import com.poly.admin.model.Product;
+import com.poly.admin.model.ProductDetail;
 import com.poly.admin.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -68,9 +69,9 @@ public class ProductController {
     @PutMapping("/api/product-detail-update")
     public ResponseEntity<?> updateDetail(@RequestBody ProductDetailDTO productDetailDTO) {
         try {
-            productService.addProductDetail(productDetailDTO);
-            System.out.println("Cập nhật chi tiết sản phẩm thành công!");
-            return ResponseEntity.ok("Cập nhật chi tiết sản phẩm thành công!");
+            ProductDetail productDetail = productService.addProductDetail(productDetailDTO);
+            //System.out.println("Cập nhật chi tiết sản phẩm thành công!");
+            return ResponseEntity.ok(productDetail);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Lỗi khi cập nhật chi tiết sản phẩm: " + e.getMessage());

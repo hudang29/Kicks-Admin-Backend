@@ -28,7 +28,7 @@ public class ProductService {
     private DiscountRepo discountRepo;
 
     public List<ProductDTO> getAllProducts() {
-        return productRepo.findAll().stream()
+        return productRepo.findAllByOrderByCreateAtDesc().stream()
                 .map(product -> new ProductDTO(product.getId(),
                         product.getName(),
                         product.getShoesCategory().getId(),
@@ -128,7 +128,7 @@ public class ProductService {
         ));
     }
 
-    public void addProductDetail(ProductDetailDTO productDetailDTO) {
+    public ProductDetail addProductDetail(ProductDetailDTO productDetailDTO) {
         Integer productId = productDetailDTO.getProductId();
         Integer discountId = productDetailDTO.getDiscountId();
         Integer productDetailId = productDetailDTO.getId();
@@ -154,7 +154,7 @@ public class ProductService {
         }
         productDetail.setIsDefault(false);
 
-        productDetailRepo.save(productDetail);
+        return productDetailRepo.save(productDetail);
     }
     public void updateProductDetail(ProductDetailDTO updateData) {
         Integer productId = updateData.getProductId();
