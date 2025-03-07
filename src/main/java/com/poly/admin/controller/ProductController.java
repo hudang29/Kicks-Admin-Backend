@@ -6,6 +6,7 @@ import com.poly.admin.model.Product;
 import com.poly.admin.model.ProductDetail;
 import com.poly.admin.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,11 @@ public class ProductController {
     @GetMapping("/api/list-product")
     public List<ProductDTO> showProducts() {
         return productService.getAllProducts();
+    }
+
+    @GetMapping("/api/page-product")
+    public Page<ProductDTO> showPageProducts(@RequestParam(defaultValue = "0") int page) {
+        return productService.getAllProducts(page);
     }
 
     @GetMapping("/api/list-product/{id}")

@@ -4,6 +4,10 @@ import com.poly.admin.dto.*;
 import com.poly.admin.model.*;
 import com.poly.admin.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -17,8 +21,6 @@ public class ProductService {
     @Autowired
     private ProductDetailRepo productDetailRepo;
     @Autowired
-    private ProductSizeRepo productSizeRepo;
-    @Autowired
     private ShoesCategoryRepo shoesCategoryRepo;
     @Autowired
     private GenderCategoryRepo genderCategoryRepo;
@@ -26,6 +28,20 @@ public class ProductService {
     private SupplierRepo supplierRepo;
     @Autowired
     private DiscountRepo discountRepo;
+
+    public Page<ProductDTO> getAllProducts(int page) {
+        int size = 9; // 6 sản phẩm mỗi trang
+        Pageable pageable = PageRequest.of(page, size);
+        return productRepo.findAll(pageable)
+                .map(product -> new ProductDTO(product.getId(),
+                        product.getName(),
+                        product.getShoesCategory().getId(),
+                        product.getGenderCategory().getId(),
+                        product.getSupplier().getId(),
+                        product.getBrand(),
+                        product.getPrice(),
+                        product.getDescription()));
+    }
 
     public List<ProductDTO> getAllProducts() {
         return productRepo.findAllByOrderByCreateAtDesc().stream()
@@ -156,6 +172,7 @@ public class ProductService {
 
         return productDetailRepo.save(productDetail);
     }
+
     public void updateProductDetail(ProductDetailDTO updateData) {
         Integer productId = updateData.getProductId();
 
