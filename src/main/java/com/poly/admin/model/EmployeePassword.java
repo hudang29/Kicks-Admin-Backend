@@ -36,6 +36,6 @@ public class EmployeePassword {
 
     @ColumnDefault("getdate()")
     @Column(name = "Create_at")
-    private Instant createAt;
+    private Instant createAt = Instant.now();
 
 }

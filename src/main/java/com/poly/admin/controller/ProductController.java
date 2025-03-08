@@ -19,12 +19,10 @@ import java.util.Optional;
 public class ProductController {
     @Autowired
     private ProductService productService;
-
-    @GetMapping("/api/list-product")
-    public List<ProductDTO> showProducts() {
-        return productService.getAllProducts();
-    }
-
+//    @GetMapping("/api/list-product")
+//    public List<ProductDTO> showProducts() {
+//        return productService.getAllProducts();
+//    }
     @GetMapping("/api/page-product")
     public Page<ProductDTO> showPageProducts(@RequestParam(defaultValue = "0") int page) {
         return productService.getAllProducts(page);

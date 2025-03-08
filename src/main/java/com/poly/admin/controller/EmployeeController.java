@@ -17,20 +17,20 @@ public class EmployeeController {
     private EmployeeService employeeService;
 
     @GetMapping("/api/show-employee")
-    public List<EmployeeDTO> getAllEmployees() {
+    public List<Employee> getAllEmployees() {
         return employeeService.getAllEmployees();
     }
 
     @GetMapping("/api/show-employee/{id}")
-    public EmployeeDTO getEmployeeById(@PathVariable Integer id) {
+    public Employee getEmployeeById(@PathVariable Integer id) {
         return employeeService.getEmployeeById(id);
     }
 
     @PutMapping("/api/update-employee")
-    public ResponseEntity<?> updateEmployee(@RequestBody Employee Employee) {
+    public ResponseEntity<?> updateEmployee(@RequestBody Employee employee) {
         try {
-            employeeService.createOrUpdateEmployee(Employee);
-            return ResponseEntity.ok("Cập nhật thành công!"); // Trả về phản hồi thành công
+            Employee updateEmployee = employeeService.createOrUpdateEmployee(employee);
+            return ResponseEntity.ok(updateEmployee); // Trả về phản hồi thành công
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Lỗi cập nhật: " + e.getMessage()); // Trả về thông báo lỗi chi tiết
@@ -40,8 +40,8 @@ public class EmployeeController {
     @PutMapping("/api/change-status-employee")
     public ResponseEntity<?> changeStatus(@RequestBody Employee Employee) {
         try {
-            employeeService.changeStatus(Employee);
-            return ResponseEntity.ok("thay đổi trạng thái thành công"); // Trả về phản hồi thành công
+            Employee employeeStatus = employeeService.changeStatus(Employee);
+            return ResponseEntity.ok(employeeStatus); // Trả về phản hồi thành công
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Lỗi: " + e.getMessage()); // Trả về thông báo lỗi chi tiết
@@ -51,11 +51,32 @@ public class EmployeeController {
     @PostMapping("/api/create-employee")
     public ResponseEntity<?> createEmployee(@RequestBody Employee Employee) {
         try {
-            employeeService.createOrUpdateEmployee(Employee);
-            return ResponseEntity.ok("Tạo thành công!"); // Trả về phản hồi thành công
+            Employee employee = employeeService.saveEmployee(Employee);
+            Employee staff = new Employee(employee.getName(),
+                    employee.getEmail(),
+                    employee.getPhone(),
+                    employee.getRole(),
+                    employee.getAddress(),
+                    employee.getCity(),
+                    employee.getDistrict(),
+                    employee.getWard());
+            return ResponseEntity.ok(staff); // Trả về phản hồi thành công
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Lỗi tạo: " + e.getMessage()); // Trả về thông báo lỗi chi tiết
+                    .body("Errors: " + e.getMessage()); // Trả về thông báo lỗi chi tiết
+        }
+    }
+
+    @PostMapping("/api/create-password")
+    public ResponseEntity<?> createPassword(@RequestBody Employee employee) {
+        String email = employee.getEmail();
+        try {
+            employeeService.createAccountForEmployee(email);
+            return ResponseEntity.ok("Successful");
+            // Trả về phản hồi thành công
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Errors: " + e.getMessage()); // Trả về thông báo lỗi chi tiết
         }
     }
 }

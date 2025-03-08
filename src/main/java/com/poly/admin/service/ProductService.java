@@ -32,7 +32,7 @@ public class ProductService {
     public Page<ProductDTO> getAllProducts(int page) {
         int size = 9; // 6 sản phẩm mỗi trang
         Pageable pageable = PageRequest.of(page, size);
-        return productRepo.findAll(pageable)
+        return productRepo.findAllByOrderByCreateAtDesc(pageable)
                 .map(product -> new ProductDTO(product.getId(),
                         product.getName(),
                         product.getShoesCategory().getId(),
@@ -43,17 +43,17 @@ public class ProductService {
                         product.getDescription()));
     }
 
-    public List<ProductDTO> getAllProducts() {
-        return productRepo.findAllByOrderByCreateAtDesc().stream()
-                .map(product -> new ProductDTO(product.getId(),
-                        product.getName(),
-                        product.getShoesCategory().getId(),
-                        product.getGenderCategory().getId(),
-                        product.getSupplier().getId(),
-                        product.getBrand(),
-                        product.getPrice(),
-                        product.getDescription())).toList();
-    }
+//    public List<ProductDTO> getAllProducts() {
+//        return productRepo.findAllByOrderByCreateAtDesc().stream()
+//                .map(product -> new ProductDTO(product.getId(),
+//                        product.getName(),
+//                        product.getShoesCategory().getId(),
+//                        product.getGenderCategory().getId(),
+//                        product.getSupplier().getId(),
+//                        product.getBrand(),
+//                        product.getPrice(),
+//                        product.getDescription())).toList();
+//    }
 
     public Optional<ProductDTO> getProductById(int id) {
         return productRepo.findById(id).map(product -> new ProductDTO(

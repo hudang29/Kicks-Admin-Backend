@@ -20,6 +20,9 @@ public class EmployeeDTO {
     private String role;
     private Boolean status;
     private Instant createAt;
+    private String city;
+    private String district;
+    private String ward;
 
     public EmployeeDTO(Integer id, String name, String email, String phone,
                        String role, Boolean status, Instant createAt) {

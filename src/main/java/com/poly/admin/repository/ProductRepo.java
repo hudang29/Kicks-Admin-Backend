@@ -16,7 +16,7 @@ public interface ProductRepo extends JpaRepository<Product, Integer> {
     @Query("SELECT p.name FROM Product p WHERE p.id = :id")
     String findNameById(@Param("id") Integer id);
 
-    List<Product> findAllByOrderByCreateAtDesc();
+    Page<Product> findAllByOrderByCreateAtDesc(Pageable pageable);
 
     @Override
     Page<Product> findAll(Pageable pageable);

@@ -53,11 +53,11 @@ public class Employee {
 
     @ColumnDefault("1")
     @Column(name = "Status")
-    private Boolean status;
+    private Boolean status = true;
 
     @ColumnDefault("getdate()")
     @Column(name = "Create_at")
-    private Instant createAt;
+    private Instant createAt = Instant.now();
 
     @Size(max = 100)
     @Nationalized
@@ -75,17 +75,36 @@ public class Employee {
     private String ward;
 
     public Employee(Integer id, String name, String email, String phone,
-                    String role, String address) {
+                    String role, String address, String city, String district, String ward) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.phone = phone;
         this.role = role;
         this.address = address;
+        this.city = city;
+        this.district = district;
+        this.ward = ward;
+    }
+
+    public Employee(String name, String email, String phone,
+                    String role, String address, String city, String district, String ward) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.role = role;
+        this.address = address;
+        this.city = city;
+        this.district = district;
+        this.ward = ward;
     }
 
     public Employee(Integer id, Boolean status) {
         this.id = id;
         this.status = status;
+    }
+
+    public Employee(String email) {
+        this.email = email;
     }
 }
