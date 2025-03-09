@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmployeeService {
@@ -79,6 +80,10 @@ public class EmployeeService {
         return employeeRepo.save(employee);
     }
 
+    public boolean getPasswordByEmployeeId(Integer id) {
+        return passwordRepo.existsByEmployee_Id(id);
+    }
+
     private String generateRandomPassword() {
         SecureRandom random = new SecureRandom();
         StringBuilder password = new StringBuilder(PASSWORD_LENGTH);
@@ -90,11 +95,11 @@ public class EmployeeService {
     }
 
     public void createAccountForEmployee(String email) {
-
-        Employee employee = employeeRepo.findByEmail(email).orElseThrow(
-                () -> new RuntimeException("Employee doesn't have an email")
-        );
-        // Mật khẩu ngẫu nhiên
+        Optional<Employee> optionalEmployee = employeeRepo.findByEmail(email);
+        if (optionalEmployee.isEmpty()) {
+            return;
+        }
+        Employee employee = optionalEmployee.get();
         String rawPassword = generateRandomPassword();
         boolean emailSent = mailService.sendPasswordToEmployee(email, rawPassword);
         if (!emailSent) {
@@ -108,5 +113,13 @@ public class EmployeeService {
         password.setEmployee(employee);
         password.setCreateAt(Instant.now());
         passwordRepo.save(password);
+    }
+
+    public String showPasswordByEmployeeId(Integer id) {
+        Optional<EmployeePassword> employeePassword = passwordRepo.findByEmployee_Id(id);
+        if (employeePassword.isEmpty()) {
+            return null;
+        }
+        return null;
     }
 }

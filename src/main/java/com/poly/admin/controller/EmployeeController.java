@@ -26,6 +26,11 @@ public class EmployeeController {
         return employeeService.getEmployeeById(id);
     }
 
+    @GetMapping("/api/check-exists-password/{id}")
+    public boolean existsPassword(@PathVariable Integer id) {
+        return employeeService.getPasswordByEmployeeId(id);
+    }
+
     @PutMapping("/api/update-employee")
     public ResponseEntity<?> updateEmployee(@RequestBody Employee employee) {
         try {
@@ -70,10 +75,14 @@ public class EmployeeController {
     @PostMapping("/api/create-password")
     public ResponseEntity<?> createPassword(@RequestBody Employee employee) {
         String email = employee.getEmail();
+
+        if (email == null || email.trim().isEmpty()) {
+            return ResponseEntity.badRequest().body("⚠️ Email cannot be empty.");
+        }
+
         try {
             employeeService.createAccountForEmployee(email);
             return ResponseEntity.ok("Successful");
-            // Trả về phản hồi thành công
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Errors: " + e.getMessage()); // Trả về thông báo lỗi chi tiết
