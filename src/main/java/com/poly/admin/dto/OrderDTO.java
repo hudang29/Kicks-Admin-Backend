@@ -1,5 +1,6 @@
 package com.poly.admin.dto;
 
+import com.poly.admin.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,15 @@ public class OrderDTO {
     private String orderStatus;
     private BigDecimal totalAmount;
     private String shippingAddress;
+
+    public OrderDTO(Integer id, Instant orderDate, String payment, String customer, OrderStatus orderStatus, BigDecimal totalAmount) {
+        this.id = id;
+        this.orderDate = orderDate;
+        this.payment = payment;
+        this.customer = customer;
+        this.orderStatus = (orderStatus != null) ? orderStatus.name() : null;
+        this.totalAmount = totalAmount;
+    }
 
     public OrderDTO(Integer id, Instant orderDate, String payment,
                     String customer, String orderStatus, BigDecimal totalAmount) {

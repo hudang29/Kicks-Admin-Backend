@@ -3,7 +3,6 @@ package com.poly.admin.controller;
 import com.poly.admin.dto.*;
 import com.poly.admin.service.DashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +18,12 @@ public class DashboardController {
     public List<SaleGraphData> getSalesGraphByMonth() {
         return dashboardService.getSalesDataByMonth();
     }
+
+    @GetMapping("/sales-graph/{year}")
+    public List<SaleGraphData> getSalesGraphEachYear(@PathVariable("year") int year) {
+        return dashboardService.getSalesDataEachYear(year);
+    }
+
 
     @GetMapping("/sales-graph-year")
     public List<SaleGraphData> getSalesGraphByYear() {

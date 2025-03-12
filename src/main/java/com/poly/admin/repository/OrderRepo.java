@@ -1,9 +1,9 @@
 package com.poly.admin.repository;
 
 import com.poly.admin.dto.*;
+import com.poly.admin.enums.OrderStatus;
 import com.poly.admin.model.Orders;
 import jakarta.validation.constraints.Size;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -21,10 +21,20 @@ public interface OrderRepo extends JpaRepository<Orders, Integer> {
             """)
     List<SaleGraphData> getSalesDataByPeriod();
 
+    @Query("""
+            SELECT new com.poly.admin.dto.SaleGraphData(MONTH(o.orderDate), SUM(o.totalAmount))
+            FROM Orders o WHERE YEAR(o.orderDate) = :year
+            AND o.orderStatus = com.poly.admin.enums.OrderStatus.COMPLETED
+            GROUP BY MONTH(o.orderDate) ORDER BY MONTH(o.orderDate)
+            """)
+    List<SaleGraphData> getSalesDataEachYear(@Param("year") Integer year);
+
+
     // Doanh thu theo tháng
     @Query("""
             SELECT new com.poly.admin.dto.SaleGraphData(MONTH(o.orderDate), SUM(o.totalAmount))
             FROM Orders o WHERE YEAR(o.orderDate) = YEAR(CURRENT_DATE)
+            AND o.orderStatus = com.poly.admin.enums.OrderStatus.COMPLETED
             GROUP BY MONTH(o.orderDate) ORDER BY MONTH(o.orderDate)
             """)
     List<SaleGraphData> getSalesDataByMonth();
@@ -32,7 +42,8 @@ public interface OrderRepo extends JpaRepository<Orders, Integer> {
     // Doanh thu theo năm
     @Query("""
             SELECT new com.poly.admin.dto.SaleGraphData(YEAR(o.orderDate), SUM(o.totalAmount))
-            FROM Orders o GROUP BY YEAR(o.orderDate) ORDER BY YEAR(o.orderDate)
+            FROM Orders o WHERE o.orderStatus = com.poly.admin.enums.OrderStatus.COMPLETED
+            GROUP BY YEAR(o.orderDate) ORDER BY YEAR(o.orderDate)
             """)
     List<SaleGraphData> getSalesDataByYear();
 
@@ -42,7 +53,7 @@ public interface OrderRepo extends JpaRepository<Orders, Integer> {
             FROM Orders o
             WHERE MONTH(o.orderDate) = MONTH(CURRENT_DATE)
             AND YEAR(o.orderDate) = YEAR(CURRENT_DATE)
-            AND o.orderStatus = 'Completed'
+            AND o.orderStatus = com.poly.admin.enums.OrderStatus.COMPLETED
             """)
     Double getTotalRevenueThisMonth();
 
@@ -52,13 +63,13 @@ public interface OrderRepo extends JpaRepository<Orders, Integer> {
             FROM Orders o
             WHERE MONTH(o.orderDate) = MONTH(CURRENT_DATE)
             AND YEAR(o.orderDate) = YEAR(CURRENT_DATE)
-            AND o.orderStatus <> 'Cancelled'
+            AND o.orderStatus <> com.poly.admin.enums.OrderStatus.CANCELLED
             """)
     Double getTotalRevenueByOrdersThisMonth();
 
     // Lấy tổng doanh thu theo từng trạng thái trong tháng
     @Query("""
-            SELECT new com.poly.admin.dto.SalesSummaryDTO(o.orderStatus, SUM(o.totalAmount))
+            SELECT new com.poly.admin.dto.SalesSummaryDTO(o.orderStatus , SUM(o.totalAmount))
             FROM Orders o
             WHERE MONTH(o.orderDate) = MONTH(CURRENT_DATE)
             AND YEAR(o.orderDate) = YEAR(CURRENT_DATE)
@@ -138,7 +149,7 @@ public interface OrderRepo extends JpaRepository<Orders, Integer> {
 //                WHEN o.orderStatus = :status
 //                o.orderDate DESC
 //            """)
-    List<Orders> findAllByOrderStatusEqualsIgnoreCaseOrderByOrderDateAsc(@Size(max = 50) String orderStatus);
+    List<Orders> findAllByOrderStatusOrderByOrderDateAsc(OrderStatus orderStatus);
 
 
 }

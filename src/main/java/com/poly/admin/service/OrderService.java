@@ -1,6 +1,7 @@
 package com.poly.admin.service;
 
 import com.poly.admin.dto.OrderDTO;
+import com.poly.admin.enums.OrderStatus;
 import com.poly.admin.model.Orders;
 import com.poly.admin.repository.OrderDetailRepo;
 import com.poly.admin.repository.OrderRepo;
@@ -28,8 +29,8 @@ public class OrderService {
         )).toList();
     }
 
-    public List<OrderDTO> getOrdersByStatus(String status) {
-        return orderRepo.findAllByOrderStatusEqualsIgnoreCaseOrderByOrderDateAsc(status)
+    public List<OrderDTO> getOrdersByStatus(OrderStatus status) {
+        return orderRepo.findAllByOrderStatusOrderByOrderDateAsc(status)
                 .stream()
                 .map(order -> new OrderDTO(
                         order.getId(),

@@ -1,5 +1,6 @@
 package com.poly.admin.model;
 
+import com.poly.admin.enums.OrderStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -60,10 +61,15 @@ public class Orders {
     @Column(name = "Order_date")
     private Instant orderDate;
 
+    @Enumerated(EnumType.STRING)
     @Size(max = 50)
     @Nationalized
-    @ColumnDefault("'Pending'")
+    @ColumnDefault("'PENDING'")
     @Column(name = "Order_status", length = 50)
-    private String orderStatus;
+    private OrderStatus orderStatus;
+
+    public String getOrderStatusString() {
+        return this.orderStatus.name();
+    }
 
 }

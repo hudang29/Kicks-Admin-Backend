@@ -1,7 +1,6 @@
 package com.poly.admin.controller;
 
 import com.poly.admin.dto.GalleryDTO;
-import com.poly.admin.model.Gallery;
 import com.poly.admin.service.GalleryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

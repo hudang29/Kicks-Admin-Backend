@@ -19,6 +19,11 @@ public class DashboardService {
         return orderRepository.getSalesDataByMonth();
     }
 
+    public List<SaleGraphData> getSalesDataEachYear(int year) {
+        return orderRepository.getSalesDataEachYear(year);
+    }
+
+
     public List<SaleGraphData> getSalesDataByYear() {
         return orderRepository.getSalesDataByYear();
     }

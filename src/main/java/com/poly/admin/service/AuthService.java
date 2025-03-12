@@ -19,8 +19,6 @@ public class AuthService {
     @Autowired
     private EmployeeRepo employeeRepo;
     @Autowired
-    private JwtUtil jwtUtil;
-    @Autowired
     private HashedPassword hashedPassword;
 
     public AuthResponse checkLogin(AuthRequest authRequest) {
@@ -31,15 +29,14 @@ public class AuthService {
         if (employee.isPresent()) {
             String hashedPasswordDb = passwordRepo.findPasswordByEmployee_Id(employee.get().getId());
             if (hashedPasswordDb != null && hashedPassword.checkPassword(password, hashedPasswordDb)) {
-                // Nếu mật khẩu đúng, tạo token
 
-                String token = jwtUtil.generateToken(email,
-                        EmployeeRoles.fromString(String.valueOf(employee.get().getRole())).name());
-                return new AuthResponse(token, true);
+                return new AuthResponse(employee.get().getId(),
+                        employee.get().getRole().name(),
+                        true);
             }
         }
 
-        return new AuthResponse("Wrong email or password", false);
+        return new AuthResponse(null, "", false);
     }
 
 }
