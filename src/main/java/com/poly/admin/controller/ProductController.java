@@ -16,10 +16,12 @@ import java.util.Optional;
 
 @RestController
 //@CrossOrigin(origins = "http://localhost:3000")
+@RequestMapping("/staff")
 public class ProductController {
     @Autowired
     private ProductService productService;
-//    @GetMapping("/api/list-product")
+
+    //    @GetMapping("/api/list-product")
 //    public List<ProductDTO> showProducts() {
 //        return productService.getAllProducts();
 //    }
@@ -37,7 +39,6 @@ public class ProductController {
     public ResponseEntity<?> updateProduct(@RequestBody ProductDTO productDTO) {
         try {
             productService.addOrUpdateProduct(productDTO);
-            System.out.println("Cập nhật sản phẩm thành công!");
             return ResponseEntity.ok("Cập nhật sản phẩm thành công!"); // Trả về phản hồi thành công
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -49,7 +50,6 @@ public class ProductController {
     public ResponseEntity<?> createProduct(@RequestBody ProductDTO productDTO) {
         try {
             Product newProduct = productService.addOrUpdateProduct(productDTO);
-            System.out.println("Thêm sản phẩm thành công!");
             return ResponseEntity.ok(newProduct); // Trả về phản hồi thành công
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
@@ -74,8 +74,12 @@ public class ProductController {
     public ResponseEntity<?> updateDetail(@RequestBody ProductDetailDTO productDetailDTO) {
         try {
             ProductDetail productDetail = productService.addProductDetail(productDetailDTO);
-            //System.out.println("Cập nhật chi tiết sản phẩm thành công!");
-            return ResponseEntity.ok(productDetail);
+            ProductDetailDTO detailDTO = new ProductDetailDTO(productDetail.getId(),
+                    productDetail.getProduct().getId(),
+                    productDetail.getColor(),
+                    productDetail.getProductDiscount().getId(),
+                    productDetail.getIsDefault());
+            return ResponseEntity.ok(detailDTO);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Lỗi khi cập nhật chi tiết sản phẩm: " + e.getMessage());

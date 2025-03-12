@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/staff/api")
 public class OrderController {
     @Autowired
     private OrderService orderService;
@@ -22,7 +22,7 @@ public class OrderController {
     }
 
     @GetMapping("/orders-by-status")
-    public List<OrderDTO> getOrdersByStatus(@RequestParam(defaultValue = "Pending") String status) {
+    public List<OrderDTO> getOrdersByStatus(@RequestParam(defaultValue = "PENDING") String status) {
 
         return orderService.getOrdersByStatus(status);
     }

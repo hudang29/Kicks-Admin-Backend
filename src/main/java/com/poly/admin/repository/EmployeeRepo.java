@@ -18,5 +18,11 @@ public interface EmployeeRepo extends JpaRepository<Employee, Integer> {
 
     boolean existsByEmail(String email);
 
+    @Query("""
+            SELECT e.role FROM Employee e
+            where e.email = :email
+            """)
+    String findRoleByEmail(@Param("email") String email);
+
     Optional<Employee> findByEmail(String email);
 }

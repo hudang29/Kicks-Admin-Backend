@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/staff")
 public class GalleryController {
     @Autowired
     private GalleryService galleryService;

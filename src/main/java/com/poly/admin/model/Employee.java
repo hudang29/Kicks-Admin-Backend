@@ -1,5 +1,6 @@
 package com.poly.admin.model;
 
+import com.poly.admin.enums.EmployeeRoles;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -41,10 +42,11 @@ public class Employee {
     @Column(name = "Phone", nullable = false, length = 20)
     private String phone;
 
+    @Enumerated(EnumType.STRING)
     @Size(max = 50)
     @Nationalized
     @Column(name = "Role", length = 50)
-    private String role;
+    private EmployeeRoles role;
 
     @Size(max = 255)
     @Nationalized
@@ -75,7 +77,7 @@ public class Employee {
     private String ward;
 
     public Employee(Integer id, String name, String email, String phone,
-                    String role, String address, String city, String district, String ward) {
+                    EmployeeRoles role, String address, String city, String district, String ward) {
         this.id = id;
         this.name = name;
         this.email = email;
@@ -88,7 +90,7 @@ public class Employee {
     }
 
     public Employee(String name, String email, String phone,
-                    String role, String address, String city, String district, String ward) {
+                    EmployeeRoles role, String address, String city, String district, String ward) {
         this.name = name;
         this.email = email;
         this.phone = phone;

@@ -1,5 +1,7 @@
 package com.poly.admin.config;
 
+import com.poly.admin.utils.JwtFilter;
+import jakarta.servlet.Filter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,16 +12,20 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+    @Autowired
+    private JwtFilter jwtFilter;
+
+
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
@@ -29,11 +35,15 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/**").permitAll() // Các API trong "/public/" sẽ không cần xác thực
-                        .anyRequest().authenticated()) // Các API khác yêu cầu xác thực
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()));
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/api/login", "/api/logout").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/manager/**").hasAnyRole("ADMIN", "MANAGER") // Admin & Manager có thể truy cập
+                        .requestMatchers("/staff/**").hasAnyRole("ADMIN", "MANAGER", "STAFF") // Tất cả đều có thể truy cập
+                        .anyRequest().permitAll())
+                .cors(httpSecurityCorsConfigurer -> corsConfigurationSource())
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // Đăng ký JwtFilter
 
         return http.build();
     }

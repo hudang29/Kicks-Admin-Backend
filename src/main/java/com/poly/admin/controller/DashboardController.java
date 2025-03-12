@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/dashboard")
+@RequestMapping("/admin/api/dashboard")
 public class DashboardController {
     @Autowired
     private DashboardService dashboardService;

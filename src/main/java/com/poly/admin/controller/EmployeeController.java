@@ -1,9 +1,8 @@
 package com.poly.admin.controller;
 
-import com.poly.admin.dto.EmployeeDTO;
-import com.poly.admin.dto.OrderDTO;
 import com.poly.admin.model.Employee;
 import com.poly.admin.service.EmployeeService;
+import com.poly.admin.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,9 +11,12 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@RequestMapping("/manager")
 public class EmployeeController {
     @Autowired
     private EmployeeService employeeService;
+    @Autowired
+    private JwtUtil jwtUtil;
 
     @GetMapping("/api/show-employee")
     public List<Employee> getAllEmployees() {
@@ -77,7 +79,7 @@ public class EmployeeController {
         String email = employee.getEmail();
 
         if (email == null || email.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("⚠️ Email cannot be empty.");
+            return ResponseEntity.badRequest().body("Email cannot be empty.");
         }
 
         try {
@@ -85,7 +87,7 @@ public class EmployeeController {
             return ResponseEntity.ok("Successful");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Errors: " + e.getMessage()); // Trả về thông báo lỗi chi tiết
+                    .body("Errors: " + e.getMessage());
         }
     }
 }

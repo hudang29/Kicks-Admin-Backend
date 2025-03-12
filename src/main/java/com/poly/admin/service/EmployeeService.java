@@ -1,6 +1,6 @@
 package com.poly.admin.service;
 
-import com.poly.admin.dto.EmployeeDTO;
+import com.poly.admin.enums.EmployeeRoles;
 import com.poly.admin.model.Employee;
 import com.poly.admin.model.EmployeePassword;
 import com.poly.admin.repository.EmployeeRepo;
@@ -48,7 +48,7 @@ public class EmployeeService {
         Employee employee;
         if (employeeRepo.existsById(id)) {
             employee = employeeRepo.findById(id).orElseThrow(
-                    () -> new RuntimeException("Employee not found"));
+                    () -> new NullPointerException("Employee not found"));
         } else {
             employee = new Employee();
             employee.setStatus(true);
@@ -115,11 +115,13 @@ public class EmployeeService {
         passwordRepo.save(password);
     }
 
-    public String showPasswordByEmployeeId(Integer id) {
-        Optional<EmployeePassword> employeePassword = passwordRepo.findByEmployee_Id(id);
-        if (employeePassword.isEmpty()) {
-            return null;
+    public String getRoleByEmail(String email) {
+        boolean check = employeeRepo.existsByEmail(email);
+        if (!check) {
+            return "";
         }
-        return null;
+        return employeeRepo.findRoleByEmail(email);
     }
+
+
 }
