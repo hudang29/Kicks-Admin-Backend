@@ -53,6 +53,13 @@ public class JwtFilter extends OncePerRequestFilter {
             String email = jwtUtil.extractExistsEmail(token);
             String role = jwtUtil.getRole(token);
 
+            boolean validateToken = jwtUtil.validateToken(token, email);
+
+            if (!validateToken) {
+                chain.doFilter(request, response);
+                return;
+            }
+
             // 4. Tạo UserDetails
             UserDetails userDetails = User.withUsername(email)
                     .password("")

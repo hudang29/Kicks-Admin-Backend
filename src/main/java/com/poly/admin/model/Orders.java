@@ -62,7 +62,6 @@ public class Orders {
     private Instant orderDate;
 
     @Enumerated(EnumType.STRING)
-    @Size(max = 50)
     @Nationalized
     @ColumnDefault("'PENDING'")
     @Column(name = "Order_status", length = 50)

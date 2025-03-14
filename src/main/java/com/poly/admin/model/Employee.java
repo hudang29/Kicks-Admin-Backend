@@ -43,7 +43,6 @@ public class Employee {
     private String phone;
 
     @Enumerated(EnumType.STRING)
-    @Size(max = 50)
     @Nationalized
     @Column(name = "Role", length = 50)
     private EmployeeRoles role;

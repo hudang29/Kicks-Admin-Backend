@@ -1,5 +1,7 @@
 package com.poly.admin.controller;
 
+import com.poly.admin.enums.EmployeeRoles;
+import com.poly.admin.enums.OrderStatus;
 import com.poly.admin.model.Employee;
 import com.poly.admin.service.EmployeeService;
 import com.poly.admin.utils.JwtUtil;
@@ -8,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/manager")
@@ -17,6 +21,13 @@ public class EmployeeController {
     private EmployeeService employeeService;
     @Autowired
     private JwtUtil jwtUtil;
+
+    @GetMapping("/api/roles")
+    public List<String> getRoles() {
+        return Arrays.stream(EmployeeRoles.values())
+                .map(Enum::name)
+                .collect(Collectors.toList());
+    }
 
     @GetMapping("/api/show-employee")
     public List<Employee> getAllEmployees() {

@@ -98,20 +98,24 @@ public class EmployeeService {
         if (optionalEmployee.isEmpty()) {
             return;
         }
-        Employee employee = optionalEmployee.get();
-        String rawPassword = generateRandomPassword();
-        boolean emailSent = mailService.sendPasswordToEmployee(email, rawPassword);
-        if (!emailSent) {
-            throw new RuntimeException("Gửi email thất bại, hủy tạo tài khoản.");
+        try {
+            Employee employee = optionalEmployee.get();
+            String rawPassword = generateRandomPassword();
+            // Mã hóa mật khẩu bằng BCrypt
+            String encodedPassword = hashedPassword.hashPassword(rawPassword);
+            EmployeePassword password = new EmployeePassword();
+            password.setHashedPassword(encodedPassword);
+            password.setEmployee(employee);
+            password.setCreateAt(Instant.now());
+            passwordRepo.save(password);
+            boolean emailSent = mailService.sendPasswordToEmployee(email, rawPassword);
+            if (!emailSent) {
+                throw new RuntimeException("Gửi email thất bại, hủy tạo tài khoản.");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        // Mã hóa mật khẩu bằng BCrypt
-        String encodedPassword = hashedPassword.hashPassword(rawPassword);
 
-        EmployeePassword password = new EmployeePassword();
-        password.setHashedPassword(encodedPassword);
-        password.setEmployee(employee);
-        password.setCreateAt(Instant.now());
-        passwordRepo.save(password);
     }
 
     public String getRoleByEmail(String email) {
