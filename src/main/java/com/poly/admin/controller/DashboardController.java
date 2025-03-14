@@ -15,57 +15,63 @@ public class DashboardController {
     private DashboardService dashboardService;
 
     @GetMapping("/sales-graph")
-    public List<SaleGraphData> getSalesGraphByMonth() {
-        return dashboardService.getSalesDataByMonth();
+    public ResponseEntity<List<SaleGraphData>> getSalesGraphByMonth() {
+        List<SaleGraphData> data = dashboardService.getSalesDataByMonth();
+        return data.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(data);
     }
 
     @GetMapping("/sales-graph/{year}")
-    public List<SaleGraphData> getSalesGraphEachYear(@PathVariable("year") int year) {
-        return dashboardService.getSalesDataEachYear(year);
+    public ResponseEntity<List<SaleGraphData>> getSalesGraphEachYear(@PathVariable int year) {
+        List<SaleGraphData> data = dashboardService.getSalesDataEachYear(year);
+        return data.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(data);
     }
 
-
     @GetMapping("/sales-graph-year")
-    public List<SaleGraphData> getSalesGraphByYear() {
-        return dashboardService.getSalesDataByYear();
+    public ResponseEntity<List<SaleGraphData>> getSalesGraphByYear() {
+        List<SaleGraphData> data = dashboardService.getSalesDataByYear();
+        return data.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(data);
     }
 
     // API lấy tổng doanh thu trong tháng hiện tại
     @GetMapping("/total-revenue")
-    public Double getTotalRevenueThisMonth() {
-        return dashboardService.getTotalRevenueThisMonth();
+    public ResponseEntity<Double> getTotalRevenueThisMonth() {
+        Double revenue = dashboardService.getTotalRevenueThisMonth();
+        return revenue != null ? ResponseEntity.ok(revenue) : ResponseEntity.noContent().build();
     }
 
     @GetMapping("/total-revenue-orders")
-    public Double getTotalRevenueByOrdersThisMonth() {
-        return dashboardService.getTotalRevenueByOrdersThisMonth();
+    public ResponseEntity<Double> getTotalRevenueByOrdersThisMonth() {
+        Double revenue = dashboardService.getTotalRevenueByOrdersThisMonth();
+        return revenue != null ? ResponseEntity.ok(revenue) : ResponseEntity.noContent().build();
     }
 
     // API lấy tổng doanh thu theo trạng thái trong tháng hiện tại
     @GetMapping("/total-revenue-by-status")
-    public List<SalesSummaryDTO> getTotalRevenueByStatus() {
-
-        return dashboardService.getTotalRevenueByStatus();
+    public ResponseEntity<List<SalesSummaryDTO>> getTotalRevenueByStatus() {
+        List<SalesSummaryDTO> data = dashboardService.getTotalRevenueByStatus();
+        return data.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(data);
     }
 
     // API lấy top 6 đơn hàng mới nhất
     @GetMapping("/get-latest-orders")
-    public List<OrderDTO> getTop6NewOrder() {
-        return dashboardService.getLatestOrders();
+    public ResponseEntity<List<OrderDTO>> getTop6NewOrder() {
+        List<OrderDTO> orders = dashboardService.getLatestOrders();
+        return orders.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(orders);
     }
 
     // API lấy top 3 sản phẩm bán chạy nhất
     @GetMapping("/get-top3-bestseller")
-    public ResponseEntity<?> getTop3BestSellers() {
+    public ResponseEntity<List<BestSellerDTO>> getTop3BestSellers() {
         List<BestSellerDTO> bestSellers = dashboardService.getTop3BestSellers();
-        return ResponseEntity.ok(bestSellers);
+        return bestSellers.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(bestSellers);
     }
-    // API lấy top 3 sản phẩm bán chạy nhất
-    // Ex:http://localhost:8080/api/dashboard/get-low-stock?threshold=5
+
+    // API lấy sản phẩm có lượng tồn kho thấp
     @GetMapping("/get-low-stock")
     public ResponseEntity<List<LowStockProductDTO>> getLowStockProducts(
-            @RequestParam(defaultValue = "6") int threshold) {
-        List<LowStockProductDTO> lowStockProducts = dashboardService.getLowStockProducts(threshold);
-        return ResponseEntity.ok(lowStockProducts);
+            @RequestParam(defaultValue = "6") int stock) {
+        List<LowStockProductDTO> lowStockProducts = dashboardService.getLowStockProducts(stock);
+        return lowStockProducts.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(lowStockProducts);
     }
+
 }

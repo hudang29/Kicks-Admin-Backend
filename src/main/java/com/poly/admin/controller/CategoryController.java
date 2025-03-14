@@ -4,6 +4,8 @@ import com.poly.admin.dto.ShoesCategoryDTO;
 import com.poly.admin.model.GenderCategory;
 import com.poly.admin.service.CategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,22 +21,28 @@ public class CategoryController {
     private CategoryService categoryService;
 
     @GetMapping("/api/gender-category")
-    public List<GenderCategory> getAllGenderCategory() {
-        return categoryService.getAllGenderCategory();
+    public ResponseEntity<List<GenderCategory>> getAllGenderCategory() {
+        List<GenderCategory> categories = categoryService.getAllGenderCategory();
+        return categories.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(categories);
     }
 
     @GetMapping("/api/gender-category/{id}")
-    public GenderCategory getGenderCategoryById(@PathVariable Integer id) {
-        return categoryService.getGenderCategoryById(id);
+    public ResponseEntity<GenderCategory> getGenderCategoryById(@PathVariable Integer id) {
+        GenderCategory category = categoryService.getGenderCategoryById(id);
+        return category != null ? ResponseEntity.ok(category) : ResponseEntity.notFound().build();
     }
 
     @GetMapping("/api/shoes-category/{id}")
-    public Optional<ShoesCategoryDTO> getShoeCategoryById(@PathVariable("id") Integer id) {
-        return categoryService.getShoesCategoryById(id);
+    public ResponseEntity<ShoesCategoryDTO> getShoeCategoryById(@PathVariable Integer id) {
+        return categoryService.getShoesCategoryById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping("/api/shoes-categories/{id}")
-    public List<ShoesCategoryDTO> getAllShoeCategoryByGenderCategoryId(@PathVariable("id") Integer id) {
-        return categoryService.getAllShoesCategoryByGenderCategoryId(id);
+    public ResponseEntity<List<ShoesCategoryDTO>> getAllShoeCategoryByGenderCategoryId(@PathVariable Integer id) {
+        List<ShoesCategoryDTO> categories = categoryService.getAllShoesCategoryByGenderCategoryId(id);
+        return categories.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(categories);
     }
+
 }

@@ -23,65 +23,76 @@ public class EmployeeController {
     private JwtUtil jwtUtil;
 
     @GetMapping("/api/roles")
-    public List<String> getRoles() {
-        return Arrays.stream(EmployeeRoles.values())
+    public ResponseEntity<List<String>> getRoles() {
+        List<String> roles = Arrays.stream(EmployeeRoles.values())
                 .map(Enum::name)
                 .collect(Collectors.toList());
+        return ResponseEntity.ok(roles);
     }
 
     @GetMapping("/api/show-employee")
-    public List<Employee> getAllEmployees() {
-        return employeeService.getAllEmployees();
+    public ResponseEntity<List<Employee>> getAllEmployees() {
+        List<Employee> employees = employeeService.getAllEmployees();
+        if (employees.isEmpty()) {
+            return ResponseEntity.noContent().build(); // Trả về 204 nếu không có nhân viên nào
+        }
+        return ResponseEntity.ok(employees);
     }
 
     @GetMapping("/api/show-employee/{id}")
-    public Employee getEmployeeById(@PathVariable Integer id) {
-        return employeeService.getEmployeeById(id);
+    public ResponseEntity<Employee> getEmployeeById(@PathVariable Integer id) {
+        Employee employee = employeeService.getEmployeeById(id);
+        if (employee == null) {
+            return ResponseEntity.notFound().build(); // Trả về 404 nếu không tìm thấy nhân viên
+        }
+        return ResponseEntity.ok(employee);
     }
 
     @GetMapping("/api/check-exists-password/{id}")
-    public boolean existsPassword(@PathVariable Integer id) {
-        return employeeService.getPasswordByEmployeeId(id);
+    public ResponseEntity<Boolean> existsPassword(@PathVariable Integer id) {
+        boolean exists = employeeService.getPasswordByEmployeeId(id);
+        return ResponseEntity.ok(exists);
     }
 
     @PutMapping("/api/update-employee")
     public ResponseEntity<?> updateEmployee(@RequestBody Employee employee) {
         try {
-            Employee updateEmployee = employeeService.createOrUpdateEmployee(employee);
-            return ResponseEntity.ok(updateEmployee); // Trả về phản hồi thành công
+            Employee updatedEmployee = employeeService.createOrUpdateEmployee(employee);
+            return ResponseEntity.ok(updatedEmployee); // Return success response
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Lỗi cập nhật: " + e.getMessage()); // Trả về thông báo lỗi chi tiết
+                    .body("An error occurred while updating the employee: " + e.getMessage());
         }
     }
 
+
     @PutMapping("/api/change-status-employee")
-    public ResponseEntity<?> changeStatus(@RequestBody Employee Employee) {
+    public ResponseEntity<?> changeStatus(@RequestBody Employee employee) {
         try {
-            Employee employeeStatus = employeeService.changeStatus(Employee);
-            return ResponseEntity.ok(employeeStatus); // Trả về phản hồi thành công
+            Employee employeeStatus = employeeService.changeStatus(employee);
+            return ResponseEntity.ok(employeeStatus); // Return success response
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Lỗi: " + e.getMessage()); // Trả về thông báo lỗi chi tiết
+                    .body("An error occurred while changing employee status: " + e.getMessage());
         }
     }
 
     @PostMapping("/api/create-employee")
-    public ResponseEntity<?> createEmployee(@RequestBody Employee Employee) {
+    public ResponseEntity<?> createEmployee(@RequestBody Employee employee) {
         try {
-            Employee employee = employeeService.saveEmployee(Employee);
-            Employee staff = new Employee(employee.getName(),
-                    employee.getEmail(),
-                    employee.getPhone(),
-                    employee.getRole(),
-                    employee.getAddress(),
-                    employee.getCity(),
-                    employee.getDistrict(),
-                    employee.getWard());
-            return ResponseEntity.ok(staff); // Trả về phản hồi thành công
+            Employee savedEmployee = employeeService.saveEmployee(employee);
+            Employee staff = new Employee(savedEmployee.getName(),
+                    savedEmployee.getEmail(),
+                    savedEmployee.getPhone(),
+                    savedEmployee.getRole(),
+                    savedEmployee.getAddress(),
+                    savedEmployee.getCity(),
+                    savedEmployee.getDistrict(),
+                    savedEmployee.getWard());
+            return ResponseEntity.ok(staff); // Return success response
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Errors: " + e.getMessage()); // Trả về thông báo lỗi chi tiết
+                    .body("An error occurred while creating a new employee: " + e.getMessage());
         }
     }
 
@@ -90,15 +101,16 @@ public class EmployeeController {
         String email = employee.getEmail();
 
         if (email == null || email.trim().isEmpty()) {
-            return ResponseEntity.badRequest().body("Email cannot be empty.");
+            return ResponseEntity.badRequest().body("Error: Email cannot be empty.");
         }
 
         try {
             employeeService.createAccountForEmployee(email);
-            return ResponseEntity.ok("Successful");
+            return ResponseEntity.ok("Password creation successful.");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Errors: " + e.getMessage());
+                    .body("An error occurred while creating the password: " + e.getMessage());
         }
     }
+
 }

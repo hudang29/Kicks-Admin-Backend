@@ -14,10 +14,10 @@ public class OrderDetailController {
     @Autowired
     private OrderDetailService orderDetailService;
 
-    @GetMapping("/order-details")
-    public ResponseEntity<List<OrderDetailDTO>> getOrderDetails(@RequestParam int id) {
+    @GetMapping("/order-details/{id}")
+    public ResponseEntity<List<OrderDetailDTO>> getOrderDetails(@PathVariable int id) {
         List<OrderDetailDTO> orderDetails = orderDetailService.getOrderDetailsByOrderId(id);
-        return ResponseEntity.ok().body(orderDetails);
+        return orderDetails.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(orderDetails);
     }
 
 }

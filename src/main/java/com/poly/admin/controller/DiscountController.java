@@ -3,6 +3,7 @@ package com.poly.admin.controller;
 import com.poly.admin.model.ProductDiscount;
 import com.poly.admin.service.DiscountService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,12 +18,15 @@ public class DiscountController {
     private DiscountService discountService;
 
     @GetMapping("/api/product-discount")
-    public List<ProductDiscount> getProductDiscount() {
-        return discountService.getAllColorDiscount();
+    public ResponseEntity<List<ProductDiscount>> getProductDiscount() {
+        List<ProductDiscount> discounts = discountService.getAllColorDiscount();
+        return discounts.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(discounts);
     }
 
     @GetMapping("/api/product-discount/{id}")
-    public ProductDiscount getProductDiscountById(@PathVariable int id) {
-        return discountService.getProductDiscountById(id);
+    public ResponseEntity<ProductDiscount> getProductDiscountById(@PathVariable int id) {
+        ProductDiscount discount = discountService.getProductDiscountById(id);
+        return discount != null ? ResponseEntity.ok(discount) : ResponseEntity.notFound().build();
     }
+
 }

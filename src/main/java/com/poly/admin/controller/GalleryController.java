@@ -16,27 +16,33 @@ public class GalleryController {
     private GalleryService galleryService;
 
     @GetMapping("/api/product-gallery/{productId}")
-    public String showProductGallery(@PathVariable Integer productId) {
-        return galleryService.getGalleryByProductId(productId);
+    public ResponseEntity<String> showProductGallery(@PathVariable Integer productId) {
+        String gallery = galleryService.getGalleryByProductId(productId);
+        return (gallery != null && !gallery.isEmpty()) ?
+                ResponseEntity.ok(gallery) : ResponseEntity.notFound().build();
     }
 
     @GetMapping("/api/product-detail-gallery/{productDetailId}")
-    public String showProductDetailGallery(@PathVariable Integer productDetailId) {
-        return galleryService.getGalleryByProductDetailId(productDetailId);
+    public ResponseEntity<String> showProductDetailGallery(@PathVariable Integer productDetailId) {
+        String gallery = galleryService.getGalleryByProductDetailId(productDetailId);
+        return (gallery != null && !gallery.isEmpty()) ?
+                ResponseEntity.ok(gallery) : ResponseEntity.notFound().build();
     }
 
     @GetMapping("/api/product-detail-galleries/{productDetailId}")
-    public List<GalleryDTO> showGalleryByProductDetailId(@PathVariable Integer productDetailId) {
-        return galleryService.getAllGalleryByProductDetailId(productDetailId);
+    public ResponseEntity<List<GalleryDTO>> showGalleryByProductDetailId(@PathVariable Integer productDetailId) {
+        List<GalleryDTO> galleries = galleryService.getAllGalleryByProductDetailId(productDetailId);
+        return galleries.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(galleries);
     }
 
     @PostMapping("/api/add-gallery")
-    public ResponseEntity<?> addGallery(@RequestBody GalleryDTO galleryDTO) {
+    public ResponseEntity<String> addGallery(@RequestBody GalleryDTO galleryDTO) {
         try {
             galleryService.addGallery(galleryDTO);
-            return ResponseEntity.ok("Thêm ảnh thành công!");
+            return ResponseEntity.ok("Gallery added successfully!");
         } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: " + e.getMessage());
         }
     }
+
 }

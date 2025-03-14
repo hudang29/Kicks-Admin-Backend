@@ -43,18 +43,6 @@ public class ProductService {
                         product.getDescription()));
     }
 
-//    public List<ProductDTO> getAllProducts() {
-//        return productRepo.findAllByOrderByCreateAtDesc().stream()
-//                .map(product -> new ProductDTO(product.getId(),
-//                        product.getName(),
-//                        product.getShoesCategory().getId(),
-//                        product.getGenderCategory().getId(),
-//                        product.getSupplier().getId(),
-//                        product.getBrand(),
-//                        product.getPrice(),
-//                        product.getDescription())).toList();
-//    }
-
     public Optional<ProductDTO> getProductById(int id) {
         return productRepo.findById(id).map(product -> new ProductDTO(
                 product.getId(),
@@ -66,11 +54,6 @@ public class ProductService {
                 product.getPrice(),
                 product.getDescription()
         ));
-    }
-
-    public String getNameById(int id) {
-
-        return productRepo.findNameById(id);
     }
 
     public Product addOrUpdateProduct(ProductDTO productDTO) {
@@ -120,6 +103,11 @@ public class ProductService {
 
     /*------ Product detail -------*/
 
+    public List<String> getColorByProductId(int id) {
+        return productDetailRepo.findColorByProductId(id);
+    }
+
+
     public List<ProductDetailDTO> getDetailByProductId(int id) {
         return productDetailRepo.findByProductId(id)
                 .stream()
@@ -144,7 +132,7 @@ public class ProductService {
         ));
     }
 
-    public ProductDetail addProductDetail(ProductDetailDTO productDetailDTO) {
+    public ProductDetail updateProductDetail(ProductDetailDTO productDetailDTO) {
         Integer productId = productDetailDTO.getProductId();
         Integer discountId = productDetailDTO.getDiscountId();
         Integer productDetailId = productDetailDTO.getId();
@@ -173,7 +161,7 @@ public class ProductService {
         return productDetailRepo.save(productDetail);
     }
 
-    public void updateProductDetail(ProductDetailDTO updateData) {
+    public ProductDetail addProductDetail(ProductDetailDTO updateData) {
         Integer productId = updateData.getProductId();
 
         ProductDetail productDetail = new ProductDetail();
@@ -182,9 +170,8 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Product is null"));
         productDetail.setProduct(product);
         productDetail.setColor(updateData.getColor());
-        productDetail.setProductDiscount(null);
-        //productDetail.setIsDefault(false);
-
+        productDetail.setProductDiscount(discountRepo.findById(1).orElse(null));
         productDetailRepo.save(productDetail);
+        return productDetailRepo.save(productDetail);
     }
 }
