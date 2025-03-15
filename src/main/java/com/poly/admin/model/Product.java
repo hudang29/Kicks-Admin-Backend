@@ -64,4 +64,16 @@ public class Product {
     @ColumnDefault("getdate()")
     @Column(name = "Create_at")
     private Instant createAt;
+
+    public Product(ShoesCategory shoesCategory, GenderCategory genderCategory, Supplier supplier,
+                   String name, BigDecimal price, String brand, String description, Instant createAt) {
+        this.shoesCategory = shoesCategory;
+        this.genderCategory = genderCategory;
+        this.supplier = supplier;
+        this.name = name;
+        this.price = price;
+        this.brand = brand;
+        this.description = description;
+        this.createAt = createAt;
+    }
 }

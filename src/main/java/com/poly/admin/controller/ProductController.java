@@ -21,10 +21,6 @@ public class ProductController {
     @Autowired
     private ProductService productService;
 
-    //    @GetMapping("/api/list-product")
-//    public List<ProductDTO> showProducts() {
-//        return productService.getAllProducts();
-//    }
     @GetMapping("/api/page-product")
     public ResponseEntity<Page<ProductDTO>> showPageProducts(@RequestParam(defaultValue = "0") int page) {
         Page<ProductDTO> products = productService.getAllProducts(page);
@@ -45,8 +41,18 @@ public class ProductController {
     @PutMapping("/api/product-update")
     public ResponseEntity<?> updateProduct(@RequestBody ProductDTO productDTO) {
         try {
-            productService.addOrUpdateProduct(productDTO);
-            return ResponseEntity.ok("Product updated successfully!");
+            Product product = productService.UpdateProduct(productDTO);
+            ProductDTO newResponse = new ProductDTO(
+                    product.getId(),
+                    product.getName(),
+                    product.getShoesCategory().getId(),
+                    product.getGenderCategory().getId(),
+                    product.getSupplier().getId(),
+                    product.getBrand(),
+                    product.getPrice(),
+                    product.getDescription()
+            );
+            return ResponseEntity.status(HttpStatus.CREATED).body(newResponse);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error updating product: " + e.getMessage());
@@ -56,8 +62,18 @@ public class ProductController {
     @PostMapping("/api/product-create")
     public ResponseEntity<?> createProduct(@RequestBody ProductDTO productDTO) {
         try {
-            Product newProduct = productService.addOrUpdateProduct(productDTO);
-            return ResponseEntity.status(HttpStatus.CREATED).body(newProduct); // Use 201 Created
+            Product newProduct = productService.addProduct(productDTO);
+            ProductDTO newResponse = new ProductDTO(
+                    newProduct.getId(),
+                    newProduct.getName(),
+                    newProduct.getShoesCategory().getId(),
+                    newProduct.getGenderCategory().getId(),
+                    newProduct.getSupplier().getId(),
+                    newProduct.getBrand(),
+                    newProduct.getPrice(),
+                    newProduct.getDescription()
+            );
+            return ResponseEntity.status(HttpStatus.CREATED).body(newResponse);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error adding product: " + e.getMessage());
@@ -114,7 +130,14 @@ public class ProductController {
     public ResponseEntity<?> createDetail(@RequestBody ProductDetailDTO newData) {
         try {
             ProductDetail newDetail =  productService.addProductDetail(newData);
-            return ResponseEntity.ok(newDetail.getColor());
+            ProductDetailDTO newResponse = new ProductDetailDTO(
+                    newDetail.getId(),
+                    newDetail.getProduct().getId(),
+                    newDetail.getColor(),
+                    newDetail.getProductDiscount().getId(),
+                    newDetail.getIsDefault()
+            );
+            return ResponseEntity.ok(newResponse);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error adding product detail: " + e.getMessage());

@@ -6,6 +6,7 @@ import com.poly.admin.model.Gallery;
 import com.poly.admin.model.ProductDetail;
 import com.poly.admin.repository.GalleryRepo;
 import com.poly.admin.repository.ProductDetailRepo;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +55,7 @@ public class GalleryService {
         Integer productDetailId = galleryDTO.getProductDetailID();
 
         ProductDetail productDetail = productDetailRepo.findById(productDetailId).orElseThrow(
-                () -> new RuntimeException("Product detail not found"));
+                () -> new EntityNotFoundException("Product detail not found"));
         Gallery gallery = new Gallery(productDetail, galleryDTO.getImage(), false );
         galleryRepo.save(gallery);
     }

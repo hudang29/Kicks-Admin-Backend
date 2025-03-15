@@ -3,6 +3,7 @@ package com.poly.admin.service;
 import com.poly.admin.dto.*;
 import com.poly.admin.model.*;
 import com.poly.admin.repository.*;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -56,36 +57,57 @@ public class ProductService {
         ));
     }
 
-    public Product addOrUpdateProduct(ProductDTO productDTO) {
+    public Product addProduct(ProductDTO productDTO){
+        Integer supplierId = productDTO.getSupplierID();
+        Integer genderCategoryId = productDTO.getGenderCategoryID();
+        Integer shoesCategoryId = productDTO.getShoesCategoryID();
+
+        GenderCategory genderCategory = genderCategoryRepo.findById(genderCategoryId)
+                .orElseThrow(() -> new EntityNotFoundException("Gender category does not exist!"));
+
+        ShoesCategory shoesCategory = shoesCategoryRepo.findById(shoesCategoryId)
+                .orElseThrow(() -> new EntityNotFoundException("Shoes category does not exist!"));
+
+        Supplier supplier = supplierRepo.findById(supplierId)
+                .orElseThrow(() -> new EntityNotFoundException("Supplier does not exist!"));
+
+        Product product = new Product(shoesCategory,
+                genderCategory,
+                supplier,
+                productDTO.getName(),
+                productDTO.getPrice(),
+                productDTO.getBrand(),
+                productDTO.getDescription(),
+                Instant.now());
+
+        return productRepo.save(product);
+    }
+
+    public Product UpdateProduct(ProductDTO productDTO) {
 
         Integer supplierId = productDTO.getSupplierID();
         Integer genderCategoryId = productDTO.getGenderCategoryID();
         Integer shoesCategoryId = productDTO.getShoesCategoryID();
         Integer productId = productDTO.getId();
-        Product product;
+        Product product = new Product();
 
         if (productId != null) {
-            // Nếu ID tồn tại, tìm sản phẩm trong database để cập nhật
             product = productRepo.findById(productId)
-                    .orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại!"));
-        } else {
-            // Nếu ID không có, tạo mới sản phẩm
-            product = new Product();
+                    .orElseThrow(() -> new EntityNotFoundException("Product does not exist!"));
         }
-
         // get GenderCategory use orElseThrow
         GenderCategory genderCategory = genderCategoryRepo.findById(genderCategoryId)
-                .orElseThrow(() -> new RuntimeException("Danh mục giới tính không tồn tại!"));
+                .orElseThrow(() -> new EntityNotFoundException("Gender category does not exist!"));
         product.setGenderCategory(genderCategory);
 
         // get ShoesCategory use orElseThrow
         ShoesCategory shoesCategory = shoesCategoryRepo.findById(shoesCategoryId)
-                .orElseThrow(() -> new RuntimeException("Danh mục giày không tồn tại!"));
+                .orElseThrow(() -> new EntityNotFoundException("Shoes category does not exist!"));
         product.setShoesCategory(shoesCategory);
 
         // get Supplier use orElseThrow
         Supplier supplier = supplierRepo.findById(supplierId)
-                .orElseThrow(() -> new RuntimeException("Nhà cung cấp không tồn tại!"));
+                .orElseThrow(() -> new RuntimeException("Supplier does not exist!"));
         product.setSupplier(supplier);
 
         // set up product
@@ -93,10 +115,6 @@ public class ProductService {
         product.setPrice(productDTO.getPrice());
         product.setBrand(productDTO.getBrand());
         product.setDescription(productDTO.getDescription());
-        if (productId == null) {
-            product.setCreateAt(Instant.now());
-        }
-
         return productRepo.save(product);
     }
 
@@ -156,7 +174,7 @@ public class ProductService {
         } else {
             productDetail.setProductDiscount(null);
         }
-        productDetail.setIsDefault(false);
+        //productDetail.setIsDefault(false);
 
         return productDetailRepo.save(productDetail);
     }
