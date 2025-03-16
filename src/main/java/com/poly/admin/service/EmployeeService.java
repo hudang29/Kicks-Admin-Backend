@@ -5,6 +5,7 @@ import com.poly.admin.model.EmployeePassword;
 import com.poly.admin.repository.EmployeeRepo;
 import com.poly.admin.repository.PasswordRepo;
 import com.poly.admin.utils.HashedPassword;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -71,7 +72,7 @@ public class EmployeeService {
         Employee employee;
         if (employeeRepo.existsById(id)) {
             employee = employeeRepo.findById(id).orElseThrow(
-                    () -> new RuntimeException("Employee not found"));
+                    () -> new EntityNotFoundException("Employee not found"));
         } else {
             return null;
         }

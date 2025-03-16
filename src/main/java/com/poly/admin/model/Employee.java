@@ -100,6 +100,17 @@ public class Employee {
         this.ward = ward;
     }
 
+    public Employee(String name, String email, String phone,
+                    String address, String city, String district, String ward) {
+        this.name = name;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+        this.city = city;
+        this.district = district;
+        this.ward = ward;
+    }
+
     public Employee(Integer id, Boolean status) {
         this.id = id;
         this.status = status;
