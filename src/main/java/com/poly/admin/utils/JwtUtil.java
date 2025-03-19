@@ -42,10 +42,6 @@ public class JwtUtil {
     public String extractExistsEmail(String token) {
         try {
             SignedJWT signedJWT = SignedJWT.parse(token);
-            boolean existsEmail = employeeRepo.existsByEmail(signedJWT.getJWTClaimsSet().getSubject());
-            if (!existsEmail) {
-                return null;
-            }
             return signedJWT.getJWTClaimsSet().getSubject();
         } catch (Exception e) {
             return null;
@@ -67,8 +63,7 @@ public class JwtUtil {
             Date expirationTime = signedJWT.getJWTClaimsSet().getExpirationTime();
             return signedJWT.verify(verifier)
                     && expirationTime.after(new Date())
-                    && email.equals(extractExistsEmail(token))
-                    && employeeRepo.existsByEmail(email);
+                    && email.equals(extractExistsEmail(token));
         } catch (Exception e) {
             return false;
         }

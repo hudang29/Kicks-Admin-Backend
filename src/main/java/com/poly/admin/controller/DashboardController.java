@@ -17,19 +17,19 @@ public class DashboardController {
     @GetMapping("/sales-graph")
     public ResponseEntity<List<SaleGraphData>> getSalesGraphByMonth() {
         List<SaleGraphData> data = dashboardService.getSalesDataByMonth();
-        return data.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(data);
+        return ResponseEntity.ok(data);
     }
 
     @GetMapping("/sales-graph/{year}")
     public ResponseEntity<List<SaleGraphData>> getSalesGraphEachYear(@PathVariable int year) {
         List<SaleGraphData> data = dashboardService.getSalesDataEachYear(year);
-        return data.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(data);
+        return ResponseEntity.ok(data);
     }
 
     @GetMapping("/sales-graph-year")
     public ResponseEntity<List<SaleGraphData>> getSalesGraphByYear() {
         List<SaleGraphData> data = dashboardService.getSalesDataByYear();
-        return data.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(data);
+        return ResponseEntity.ok(data);
     }
 
     // API lấy tổng doanh thu trong tháng hiện tại

@@ -109,23 +109,14 @@ public class EmployeeService {
             password.setEmployee(employee);
             password.setCreateAt(Instant.now());
             passwordRepo.save(password);
+
             boolean emailSent = mailService.sendPasswordToEmployee(email, rawPassword);
             if (!emailSent) {
                 throw new RuntimeException("Gửi email thất bại, hủy tạo tài khoản.");
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new EntityNotFoundException("Employee not found");
         }
 
     }
-
-    public String getRoleByEmail(String email) {
-        boolean check = employeeRepo.existsByEmail(email);
-        if (!check) {
-            return "";
-        }
-        return employeeRepo.findRoleByEmail(email);
-    }
-
-
 }
