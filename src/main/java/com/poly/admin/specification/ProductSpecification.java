@@ -2,9 +2,9 @@ package com.poly.admin.specification;
 
 import com.poly.admin.model.Product;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.stereotype.Component;
 
-@Component
+import java.time.Instant;
+
 public class ProductSpecification {
 
     public static Specification<Product> hasName(String name) {
@@ -40,12 +40,19 @@ public class ProductSpecification {
         };
     }
 
-    public static Specification<Product> getOldOrNew(String brand) {
-        return (root, query, criteriaBuilder) -> {
-            if (brand == null || brand.isEmpty()) {
-                return null;
-            }
-            return criteriaBuilder.equal(root.get("brand"), brand);
-        };
-    }
+//    public static Specification<Product> getOldOrNew(String oldOrNew) {
+//        return (root, query, criteriaBuilder) -> {
+//            if (oldOrNew == null || oldOrNew.isEmpty()) {
+//                return criteriaBuilder.conjunction();
+//            }
+//
+//            if ("old".equalsIgnoreCase(oldOrNew)) {
+//                query.orderBy(criteriaBuilder.asc(root.get("createAt")));
+//            } else if ("new".equalsIgnoreCase(oldOrNew)) {
+//                query.orderBy(criteriaBuilder.desc(root.get("createAt")));
+//            }
+//
+//            return criteriaBuilder.conjunction(); // Không có điều kiện WHERE, chỉ sắp xếp
+//        };
+//    }
 }

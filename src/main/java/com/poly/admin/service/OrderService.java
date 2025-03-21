@@ -77,6 +77,11 @@ public class OrderService {
                 () -> new IllegalArgumentException("Not found employee")
         );
 
+        if (order.getOrderStatus().name().equals(OrderStatus.CANCELLED.name()) ||
+                order.getOrderStatus().name().equals(OrderStatus.COMPLETED.name())) {
+            throw new IllegalArgumentException("Order is already completed or cancelled");
+        }
+
         try {
             order.setOrderStatus(OrderStatus.valueOf(orderDTO.getOrderStatus().toUpperCase()));
         } catch (IllegalArgumentException e) {

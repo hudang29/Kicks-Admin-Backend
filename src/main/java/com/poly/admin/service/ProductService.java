@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
@@ -54,7 +55,7 @@ public class ProductService {
         ));
     }
 
-    public Product addProduct(ProductDTO productDTO){
+    public Product addProduct(ProductDTO productDTO) {
         Integer supplierId = productDTO.getSupplierID();
         Integer genderCategoryId = productDTO.getGenderCategoryID();
         Integer shoesCategoryId = productDTO.getShoesCategoryID();
@@ -116,14 +117,24 @@ public class ProductService {
     }
 
     public Page<ProductDTO> searchProducts(String name, String brand,
-                                           Double minPrice, Double maxPrice, int page) {
+                                           Double minPrice, Double maxPrice, int page,
+                                           String olderOrNewest) {
         int size = 9;
-        Pageable pageable = PageRequest.of(page, size);
 
         Specification<Product> spec = Specification
                 .where(ProductSpecification.hasName(name))
                 .and(ProductSpecification.hasBrand(brand))
                 .and(ProductSpecification.hasPriceBetween(minPrice, maxPrice));
+
+        Sort sort;
+
+        if (olderOrNewest.equalsIgnoreCase("older")) {
+            sort = Sort.by("createAt").ascending();
+        } else {
+            sort = Sort.by("createAt").descending();
+        }
+
+        Pageable pageable = PageRequest.of(page, size, sort);
 
         Page<Product> products = productRepo.findAll(spec, pageable);
 
