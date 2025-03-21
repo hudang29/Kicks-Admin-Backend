@@ -3,7 +3,6 @@ package com.poly.admin.repository;
 import com.poly.admin.dto.OrderDetailDTO;
 import com.poly.admin.model.OrderDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -31,4 +30,5 @@ public interface OrderDetailRepo extends JpaRepository<OrderDetail, Integer> {
     WHERE o.id = :id
 """)
     List<OrderDetailDTO> findOrderDetailByID(@Param("id") Integer id);
+
 }

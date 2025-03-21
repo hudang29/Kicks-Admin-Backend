@@ -35,7 +35,8 @@ public class ProductController {
             @RequestParam(required = false) Double maxPrice,
             @RequestParam(defaultValue = "newest") String sortBy
     ) {
-        Page<ProductDTO> products = productService.searchProducts(name, brand, minPrice, maxPrice, page);
+        Page<ProductDTO> products = productService
+                .searchProducts(name, brand, minPrice, maxPrice, page, sortBy);
         if (products.isEmpty()) {
             return ResponseEntity.noContent().build();
         }
