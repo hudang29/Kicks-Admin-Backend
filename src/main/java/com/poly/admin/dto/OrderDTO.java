@@ -16,6 +16,7 @@ import java.time.Instant;
 public class OrderDTO {
     private Integer id;
     private Integer couponId;
+    private Integer employeeId;
     private Instant orderDate;
     private String payment;
     private String customer;
@@ -23,6 +24,21 @@ public class OrderDTO {
     private String orderStatus;
     private BigDecimal totalAmount;
     private String shippingAddress;
+
+    public OrderDTO(Integer id, Integer couponId, Integer employeeId, Instant orderDate,
+                    String payment, String customer, String phone, OrderStatus orderStatus,
+                    BigDecimal totalAmount,  String shippingAddress) {
+        this.id = id;
+        this.couponId = couponId;
+        this.employeeId = employeeId;
+        this.orderDate = orderDate;
+        this.payment = payment;
+        this.customer = customer;
+        this.phone = phone;
+        this.orderStatus = (orderStatus != null) ? orderStatus.name() : null;
+        this.totalAmount = totalAmount;
+        this.shippingAddress = shippingAddress;
+    }
 
     public OrderDTO(Integer id, Instant orderDate, String payment, String customer,
                     OrderStatus orderStatus, BigDecimal totalAmount) {

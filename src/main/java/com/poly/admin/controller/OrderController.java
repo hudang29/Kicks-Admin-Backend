@@ -44,4 +44,10 @@ public class OrderController {
         return orders.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(orders);
     }
 
+    @PutMapping("/orders/change-status")
+    public ResponseEntity<?> changeOrderStatus(@RequestBody OrderDTO orderDTO) {
+        OrderDTO order = orderService.changeOrderStatus(orderDTO);
+        return order != null ? ResponseEntity.ok(order) : ResponseEntity.notFound().build();
+    }
+
 }

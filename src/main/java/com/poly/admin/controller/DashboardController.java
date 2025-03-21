@@ -52,6 +52,20 @@ public class DashboardController {
         return data.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(data);
     }
 
+    // API lấy tổng doanh thu theo trạng thái Canceled trong tháng hiện tại
+    @GetMapping("/total-revenue-by-status-canceled")
+    public ResponseEntity<Double> getTotalRevenueByStatusCanceled() {
+        Double data = dashboardService.getTotalRevenueByStatusCanceled();
+        return data != null ? ResponseEntity.ok(data) : ResponseEntity.noContent().build();
+    }
+
+    // API lấy tổng số lượng giày đã bán trong tháng
+    @GetMapping("/total-shoes-sale")
+    public ResponseEntity<Integer> getTotalShoesSaleThisMonth() {
+        Integer data = dashboardService.getTotalShoesSale();
+        return data != null ? ResponseEntity.ok(data) : ResponseEntity.noContent().build();
+    }
+
     // API lấy top 6 đơn hàng mới nhất
     @GetMapping("/get-latest-orders")
     public ResponseEntity<List<OrderDTO>> getTop6NewOrder() {
