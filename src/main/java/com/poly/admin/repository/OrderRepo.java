@@ -3,6 +3,7 @@ package com.poly.admin.repository;
 import com.poly.admin.dto.*;
 import com.poly.admin.enums.OrderStatus;
 import com.poly.admin.model.Orders;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -11,13 +12,20 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface OrderRepo extends JpaRepository<Orders, Integer> {
+    @Query("""
+            SELECT new com.poly.admin.dto.SaleGraphData(MONTH(o.orderDate), SUM(o.totalAmount))
+            FROM Orders o
+            WHERE YEAR(o.orderDate) = YEAR(CURRENT_DATE)
+            GROUP BY MONTH(o.orderDate)
+            ORDER BY MONTH(o.orderDate)
+            """)
+    List<SaleGraphData> getSalesDataByPeriod();
 
     @Query("""
             SELECT new com.poly.admin.dto.SaleGraphData(MONTH(o.orderDate), SUM(o.totalAmount))
             FROM Orders o WHERE YEAR(o.orderDate) = :year
             AND o.orderStatus = com.poly.admin.enums.OrderStatus.COMPLETED
-            GROUP BY MONTH(o.orderDate)
-            ORDER BY MONTH(o.orderDate)
+            GROUP BY MONTH(o.orderDate) ORDER BY MONTH(o.orderDate)
             """)
     List<SaleGraphData> getSalesDataEachYear(@Param("year") Integer year);
 
@@ -143,10 +151,5 @@ public interface OrderRepo extends JpaRepository<Orders, Integer> {
 //            """)
     List<Orders> findAllByOrderStatusOrderByOrderDateAsc(OrderStatus orderStatus);
 
-//    @Modifying
-//    @Query("""
-//    UPDATE Orders o
-//    SET o.orderStatus = :orderStatus, o.employee
-//""")
 
 }

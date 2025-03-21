@@ -106,6 +106,17 @@
         <!--            <version>0.11.5</version>-->
         <!--        </dependency>-->
 
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>8.0.33</version> <!-- Kiểm tra phiên bản mới nhất -->
+        </dependency>
+
+        <!-- Spring Boot Starter Web (nếu chưa có) -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
 
     </dependencies>
 

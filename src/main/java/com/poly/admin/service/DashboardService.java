@@ -1,6 +1,7 @@
 package com.poly.admin.service;
 
 import com.poly.admin.dto.*;
+import com.poly.admin.repository.OrderDetailRepo;
 import com.poly.admin.repository.OrderRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -14,6 +15,9 @@ import java.util.List;
 public class DashboardService {
     @Autowired
     private OrderRepo orderRepository;
+
+    @Autowired
+    private OrderDetailRepo orderDetailRepository;
 
     public List<SaleGraphData> getSalesDataByMonth() {
         return orderRepository.getSalesDataByMonth();
@@ -38,6 +42,14 @@ public class DashboardService {
 
     public List<SalesSummaryDTO> getTotalRevenueByStatus() {
         return orderRepository.getTotalRevenueByStatus();
+    }
+
+    public Double getTotalRevenueByStatusCanceled() {
+        return orderRepository.getTotalRevenueByStatusCanceled();
+    }
+
+    public Integer getTotalShoesSale(){
+        return orderDetailRepository.getTotalShoesSale();
     }
 
     public List<OrderDTO> getLatestOrders() {
