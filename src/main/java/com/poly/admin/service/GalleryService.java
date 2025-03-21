@@ -48,14 +48,20 @@ public class GalleryService {
         return imgList.isEmpty() ? null : imgList.getFirst();
     }
 
-    public void addGallery(GalleryDTO galleryDTO) {
+    public GalleryDTO addGallery(GalleryDTO galleryDTO) {
 
         Integer productDetailId = galleryDTO.getProductDetailID();
 
         ProductDetail productDetail = productDetailRepo.findById(productDetailId).orElseThrow(
                 () -> new EntityNotFoundException("Product detail not found"));
-        Gallery gallery = new Gallery(productDetail, galleryDTO.getImage(), false );
-        galleryRepo.save(gallery);
+        Gallery gallery = new Gallery(productDetail, galleryDTO.getImage(), false);
+
+        Gallery newGallery = galleryRepo.save(gallery);
+
+        return new GalleryDTO(newGallery.getId(),
+                newGallery.getImage(),
+                newGallery.getProductDetail().getId(),
+                newGallery.getIsDefault());
     }
 
 }
