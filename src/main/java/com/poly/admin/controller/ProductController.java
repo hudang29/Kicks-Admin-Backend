@@ -1,9 +1,7 @@
 package com.poly.admin.controller;
 
 import com.poly.admin.dto.ProductDTO;
-import com.poly.admin.dto.ProductDetailDTO;
 import com.poly.admin.model.Product;
-import com.poly.admin.model.ProductDetail;
 import com.poly.admin.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -11,17 +9,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 import java.util.Optional;
 
 @RestController
-//@CrossOrigin(origins = "http://localhost:3000")
-@RequestMapping("/staff")
+@RequestMapping("/staff/api")
 public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @GetMapping("/api/page-product")
+    @GetMapping("/page-product")
     public ResponseEntity<Page<ProductDTO>> showPageProducts(@RequestParam(defaultValue = "0") int page) {
         Page<ProductDTO> products = productService.getAllProducts(page);
         if (products.isEmpty()) {
@@ -30,7 +26,25 @@ public class ProductController {
         return ResponseEntity.ok(products);
     }
 
-    @GetMapping("/api/list-product/{id}")
+    @GetMapping("/page-product/search")
+    public ResponseEntity<Page<ProductDTO>> searchProducts(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(required = false) String name,
+            @RequestParam(required = false) String brand,
+            @RequestParam(required = false) Double minPrice,
+            @RequestParam(required = false) Double maxPrice,
+            @RequestParam(defaultValue = "newest") String sortBy
+    ) {
+        Page<ProductDTO> products = productService
+                .searchProducts(name, brand, minPrice, maxPrice, page, sortBy);
+        if (products.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        return ResponseEntity.ok(products);
+    }
+
+
+    @GetMapping("/list-product/{id}")
     public ResponseEntity<ProductDTO> getProductById(@PathVariable("id") Integer id) {
         Optional<ProductDTO> product = productService.getProductById(id);
         return product.map(ResponseEntity::ok)
@@ -38,7 +52,7 @@ public class ProductController {
     }
 
 
-    @PutMapping("/api/product-update")
+    @PutMapping("/product-update")
     public ResponseEntity<?> updateProduct(@RequestBody ProductDTO productDTO) {
         try {
             Product product = productService.UpdateProduct(productDTO);
@@ -59,7 +73,7 @@ public class ProductController {
         }
     }
 
-    @PostMapping("/api/product-create")
+    @PostMapping("/product-create")
     public ResponseEntity<?> createProduct(@RequestBody ProductDTO productDTO) {
         try {
             Product newProduct = productService.addProduct(productDTO);
@@ -79,69 +93,4 @@ public class ProductController {
                     .body("Error adding product: " + e.getMessage());
         }
     }
-
-    /*------ Product detail -------*/
-
-    @GetMapping("/api/list-color/{productId}")
-    public ResponseEntity<List<String>> showColorByProductID(@PathVariable("productId") Integer id){
-        List<String> colors = productService.getColorByProductId(id);
-        if (colors.isEmpty()) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.ok(colors);
-    }
-
-    @GetMapping("/api/list-product-detail/{productId}")
-    public ResponseEntity<List<ProductDetailDTO>> showProductDetailByProductID(@PathVariable("productId") Integer id) {
-        List<ProductDetailDTO> details = productService.getDetailByProductId(id);
-        if (details.isEmpty()) {
-            return ResponseEntity.noContent().build(); // Return 204 if no details found
-        }
-        return ResponseEntity.ok(details);
-    }
-
-    @GetMapping("/api/product-detail/{id}")
-    public ResponseEntity<ProductDetailDTO> showDetail(@PathVariable("id") Integer id) {
-        Optional<ProductDetailDTO> detail = productService.getDetailById(id);
-        return detail.map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build()); // 404 Not Found
-    }
-
-
-    @PutMapping("/api/product-detail-update")
-    public ResponseEntity<?> updateDetail(@RequestBody ProductDetailDTO productDetailDTO) {
-        try {
-            ProductDetail productDetail = productService.updateProductDetail(productDetailDTO);
-            ProductDetailDTO detailDTO = new ProductDetailDTO(
-                    productDetail.getId(),
-                    productDetail.getProduct().getId(),
-                    productDetail.getColor(),
-                    productDetail.getProductDiscount().getId(),
-                    productDetail.getIsDefault()
-            );
-            return ResponseEntity.ok(detailDTO);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error updating product detail: " + e.getMessage());
-        }
-    }
-
-    @PostMapping("/api/product-detail-create")
-    public ResponseEntity<?> createDetail(@RequestBody ProductDetailDTO newData) {
-        try {
-            ProductDetail newDetail =  productService.addProductDetail(newData);
-            ProductDetailDTO newResponse = new ProductDetailDTO(
-                    newDetail.getId(),
-                    newDetail.getProduct().getId(),
-                    newDetail.getColor(),
-                    newDetail.getProductDiscount().getId(),
-                    newDetail.getIsDefault()
-            );
-            return ResponseEntity.ok(newResponse);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("Error adding product detail: " + e.getMessage());
-        }
-    }
-
 }

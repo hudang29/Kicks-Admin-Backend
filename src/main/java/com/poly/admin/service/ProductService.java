@@ -3,12 +3,14 @@ package com.poly.admin.service;
 import com.poly.admin.dto.*;
 import com.poly.admin.model.*;
 import com.poly.admin.repository.*;
+import com.poly.admin.specification.ProductSpecification;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -20,15 +22,11 @@ public class ProductService {
     @Autowired
     private ProductRepo productRepo;
     @Autowired
-    private ProductDetailRepo productDetailRepo;
-    @Autowired
     private ShoesCategoryRepo shoesCategoryRepo;
     @Autowired
     private GenderCategoryRepo genderCategoryRepo;
     @Autowired
     private SupplierRepo supplierRepo;
-    @Autowired
-    private DiscountRepo discountRepo;
 
     public Page<ProductDTO> getAllProducts(int page) {
         int size = 9; // 6 sản phẩm mỗi trang
@@ -57,7 +55,7 @@ public class ProductService {
         ));
     }
 
-    public Product addProduct(ProductDTO productDTO){
+    public Product addProduct(ProductDTO productDTO) {
         Integer supplierId = productDTO.getSupplierID();
         Integer genderCategoryId = productDTO.getGenderCategoryID();
         Integer shoesCategoryId = productDTO.getShoesCategoryID();
@@ -118,78 +116,37 @@ public class ProductService {
         return productRepo.save(product);
     }
 
+    public Page<ProductDTO> searchProducts(String name, String brand,
+                                           Double minPrice, Double maxPrice, int page,
+                                           String olderOrNewest) {
+        int size = 9;
 
-    /*------ Product detail -------*/
+        Specification<Product> spec = Specification
+                .where(ProductSpecification.hasName(name))
+                .and(ProductSpecification.hasBrand(brand))
+                .and(ProductSpecification.hasPriceBetween(minPrice, maxPrice));
 
-    public List<String> getColorByProductId(int id) {
-        return productDetailRepo.findColorByProductId(id);
-    }
+        Sort sort;
 
+        if (olderOrNewest.equalsIgnoreCase("older")) {
+            sort = Sort.by("createAt").ascending();
+        } else {
+            sort = Sort.by("createAt").descending();
+        }
 
-    public List<ProductDetailDTO> getDetailByProductId(int id) {
-        return productDetailRepo.findByProductId(id)
-                .stream()
-                .map(productDetail -> new ProductDetailDTO(
-                        productDetail.getId(),
-                        productDetail.getProduct().getId(),
-                        productDetail.getColor(),
-                        productDetail.getProductDiscount() != null ?
-                                productDetail.getProductDiscount().getId() : null,
-                        productDetail.getIsDefault()
-                )).toList();
-    }
+        Pageable pageable = PageRequest.of(page, size, sort);
 
-    public Optional<ProductDetailDTO> getDetailById(int id) {
-        return productDetailRepo.findById(id).map(productDetail -> new ProductDetailDTO(
-                productDetail.getId(),
-                productDetail.getProduct().getId(),
-                productDetail.getColor(),
-                productDetail.getProductDiscount() != null ?
-                        productDetail.getProductDiscount().getId() : null,
-                productDetail.getIsDefault()
+        Page<Product> products = productRepo.findAll(spec, pageable);
+
+        return products.map(product -> new ProductDTO(
+                product.getId(),
+                product.getName(),
+                product.getShoesCategory().getId(),
+                product.getGenderCategory().getId(),
+                product.getSupplier().getId(),
+                product.getBrand(),
+                product.getPrice(),
+                product.getDescription()
         ));
-    }
-
-    public ProductDetail updateProductDetail(ProductDetailDTO productDetailDTO) {
-        Integer productId = productDetailDTO.getProductId();
-        Integer discountId = productDetailDTO.getDiscountId();
-        Integer productDetailId = productDetailDTO.getId();
-
-        ProductDetail productDetail;
-        if (productDetailId != null) {
-            productDetail = productDetailRepo.findById(productDetailId)
-                    .orElseThrow(() -> new RuntimeException("Sản phẩm không tồn tại!"));
-        } else {
-            productDetail = new ProductDetail();
-        }
-
-        Product product = productRepo.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product is null"));
-        productDetail.setProduct(product);
-        productDetail.setColor(productDetailDTO.getColor());
-
-        Optional<ProductDiscount> optionalDiscount = discountRepo.findById(discountId);
-        if (optionalDiscount.isPresent()) {
-            productDetail.setProductDiscount(optionalDiscount.get());
-        } else {
-            productDetail.setProductDiscount(null);
-        }
-        //productDetail.setIsDefault(false);
-
-        return productDetailRepo.save(productDetail);
-    }
-
-    public ProductDetail addProductDetail(ProductDetailDTO updateData) {
-        Integer productId = updateData.getProductId();
-
-        ProductDetail productDetail = new ProductDetail();
-
-        Product product = productRepo.findById(productId)
-                .orElseThrow(() -> new RuntimeException("Product is null"));
-        productDetail.setProduct(product);
-        productDetail.setColor(updateData.getColor());
-        productDetail.setProductDiscount(discountRepo.findById(1).orElse(null));
-        productDetailRepo.save(productDetail);
-        return productDetailRepo.save(productDetail);
     }
 }

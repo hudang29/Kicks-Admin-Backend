@@ -31,15 +31,4 @@ public interface OrderDetailRepo extends JpaRepository<OrderDetail, Integer> {
 """)
     List<OrderDetailDTO> findOrderDetailByID(@Param("id") Integer id);
 
-    // Lấy tổng doanh thu theo trạng thái canceled trong tháng
-    @Query("""
-            SELECT SUM(od.quantity)
-            FROM OrderDetail od
-            JOIN od.orders o
-            WHERE MONTH(o.orderDate) = MONTH(CURRENT_DATE)
-            AND YEAR(o.orderDate) = YEAR(CURRENT_DATE)
-            AND o.orderStatus <> com.poly.admin.enums.OrderStatus.CANCELLED
-            """)
-    Integer getTotalShoesSale();
-
 }

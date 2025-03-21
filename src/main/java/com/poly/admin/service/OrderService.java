@@ -2,9 +2,7 @@ package com.poly.admin.service;
 
 import com.poly.admin.dto.OrderDTO;
 import com.poly.admin.enums.OrderStatus;
-import com.poly.admin.model.Employee;
 import com.poly.admin.model.Orders;
-import com.poly.admin.repository.EmployeeRepo;
 import com.poly.admin.repository.OrderDetailRepo;
 import com.poly.admin.repository.OrderRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +15,6 @@ import java.util.Optional;
 public class OrderService {
     @Autowired
     private OrderRepo orderRepo;
-    @Autowired
-    private EmployeeRepo employeeRepo;
 
     public OrderDTO getById(Integer id) {
         Optional<Orders> optionalOrder = orderRepo.findById(id);
@@ -30,7 +26,6 @@ public class OrderService {
         return new OrderDTO(
                 order.getId(),
                 order.getCoupon() != null ? order.getCoupon().getId() : null,
-                order.getEmployee() != null ? order.getEmployee().getId() : null,
                 order.getOrderDate(),
                 order.getPayment().getPaymentMethod(),
                 order.getCustomer().getName(),
@@ -65,41 +60,4 @@ public class OrderService {
                         order.getTotalAmount()
                 )).toList();
     }
-
-    public OrderDTO changeOrderStatus(OrderDTO orderDTO) {
-        Integer orderId = orderDTO.getId();
-        Integer employeeId = orderDTO.getEmployeeId();
-
-        Orders order = orderRepo.findById(orderId).orElseThrow(
-                () -> new IllegalArgumentException("Not found order")
-        );
-
-        Employee employee = employeeRepo.findById(employeeId).orElseThrow(
-                () -> new IllegalArgumentException("Not found employee")
-        );
-
-        try {
-            order.setOrderStatus(OrderStatus.valueOf(orderDTO.getOrderStatus().toUpperCase()));
-        } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("Invalid order status: " + orderDTO.getOrderStatus());
-        }
-
-        order.setEmployee(employee);
-
-        Orders savedOrder = orderRepo.save(order);
-
-        return new OrderDTO(
-                savedOrder.getId(),
-                savedOrder.getCoupon() != null ? savedOrder.getCoupon().getId() : null,
-                savedOrder.getEmployee() != null ? savedOrder.getEmployee().getId() : null,
-                savedOrder.getOrderDate(),
-                savedOrder.getPayment().getPaymentMethod(),
-                savedOrder.getCustomer().getName(),
-                savedOrder.getCustomer().getPhone(),
-                savedOrder.getOrderStatus(),
-                savedOrder.getTotalAmount(),
-                savedOrder.getShippingAddress() != null ? order.getShippingAddress() : null
-        );
-    }
-
 }

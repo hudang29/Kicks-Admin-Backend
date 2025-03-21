@@ -42,6 +42,7 @@ public class SizeService {
                 .stream()
                 .map(size -> new SizeDTO(
                         size.getId(),
+                        size.getProductDetail().getId(),
                         size.getSize(),
                         size.getStock()
                 )).toList();

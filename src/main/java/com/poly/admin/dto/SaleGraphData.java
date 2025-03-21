@@ -1,8 +1,13 @@
 package com.poly.admin.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.math.BigDecimal;
 import java.time.Instant;
 
+@Getter
+@Setter
 public class SaleGraphData {
     private Integer  period;
     private BigDecimal totalRevenue;
@@ -12,11 +17,8 @@ public class SaleGraphData {
         this.totalRevenue = totalRevenue;
     }
 
-    public Integer  getPeriod() {
-        return period;
+    public SaleGraphData() {
+
     }
 
-    public BigDecimal getTotalRevenue() {
-        return totalRevenue;
-    }
 }

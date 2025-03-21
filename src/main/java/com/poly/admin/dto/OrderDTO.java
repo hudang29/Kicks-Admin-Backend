@@ -50,12 +50,14 @@ public class OrderDTO {
         this.totalAmount = totalAmount;
     }
 
-    public OrderDTO(Integer id, Instant orderDate, String payment,
-                    String customer, String orderStatus, BigDecimal totalAmount) {
+    public OrderDTO(Integer id, Integer employeeId, Instant orderDate, String payment,
+                    String customer, String phone, String orderStatus, BigDecimal totalAmount) {
         this.id = id;
+        this.employeeId = employeeId;
         this.orderDate = orderDate;
         this.payment = payment;
         this.customer = customer;
+        this.phone = phone;
         this.orderStatus = orderStatus;
         this.totalAmount = totalAmount;
     }
@@ -64,6 +66,21 @@ public class OrderDTO {
                     String phone, OrderStatus orderStatus, BigDecimal totalAmount,  String shippingAddress) {
         this.id = id;
         this.couponId = couponId;
+        this.orderDate = orderDate;
+        this.payment = payment;
+        this.customer = customer;
+        this.phone = phone;
+        this.orderStatus = (orderStatus != null) ? orderStatus.name() : null;
+        this.totalAmount = totalAmount;
+        this.shippingAddress = shippingAddress;
+    }
+
+    public OrderDTO(Integer id, Integer couponId, Integer employeeId, Instant orderDate,
+                    String payment, String customer, String phone, OrderStatus orderStatus,
+                    BigDecimal totalAmount,  String shippingAddress) {
+        this.id = id;
+        this.couponId = couponId;
+        this.employeeId = employeeId;
         this.orderDate = orderDate;
         this.payment = payment;
         this.customer = customer;

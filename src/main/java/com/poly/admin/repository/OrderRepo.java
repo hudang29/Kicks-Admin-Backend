@@ -25,7 +25,7 @@ public interface OrderRepo extends JpaRepository<Orders, Integer> {
             SELECT new com.poly.admin.dto.SaleGraphData(MONTH(o.orderDate), SUM(o.totalAmount))
             FROM Orders o WHERE YEAR(o.orderDate) = :year
             AND o.orderStatus = com.poly.admin.enums.OrderStatus.COMPLETED
-            GROUP BY MONTH(o.orderDate) ORDER BY MONTH(o.orderDate) ASC
+            GROUP BY MONTH(o.orderDate) ORDER BY MONTH(o.orderDate)
             """)
     List<SaleGraphData> getSalesDataEachYear(@Param("year") Integer year);
 
@@ -76,18 +76,6 @@ public interface OrderRepo extends JpaRepository<Orders, Integer> {
             GROUP BY o.orderStatus
             """)
     List<SalesSummaryDTO> getTotalRevenueByStatus();
-
-    // Lấy tổng doanh thu theo trạng thái canceled trong tháng
-    @Query("""
-            SELECT SUM(o.totalAmount)
-            FROM Orders o
-            WHERE MONTH(o.orderDate) = MONTH(CURRENT_DATE)
-            AND YEAR(o.orderDate) = YEAR(CURRENT_DATE)
-            AND o.orderStatus = com.poly.admin.enums.OrderStatus.CANCELLED
-            GROUP BY o.orderStatus
-            """)
-    Double getTotalRevenueByStatusCanceled();
-
 
     @Query("""
             SELECT new com.poly.admin.dto.OrderDTO(

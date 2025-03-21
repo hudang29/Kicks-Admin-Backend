@@ -1,7 +1,6 @@
 package com.poly.admin.service;
 
 import com.poly.admin.dto.GalleryDTO;
-import com.poly.admin.dto.ProductDetailDTO;
 import com.poly.admin.model.Gallery;
 import com.poly.admin.model.ProductDetail;
 import com.poly.admin.repository.GalleryRepo;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class GalleryService {
