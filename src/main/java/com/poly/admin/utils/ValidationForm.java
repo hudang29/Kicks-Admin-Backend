@@ -1,13 +1,10 @@
 package com.poly.admin.utils;
 
-import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 
-@Component
 public class ValidationForm {
 
-    public boolean isValidPassword(String password) {
+    public static boolean isValidPassword(String password) {
         // Độ dài tối thiểu 8 ký tự
         if (password.length() < 8) {
             return false;
@@ -31,7 +28,7 @@ public class ValidationForm {
     }
 
     // Kiểm tra tên (Chỉ chứa chữ cái, khoảng trắng, gạch ngang, từ 2-50 ký tự)
-    public boolean isValidName(String name) {
+    public static boolean isValidName(String name) {
         if (name == null) {
             return false;
         }
@@ -40,7 +37,7 @@ public class ValidationForm {
     }
 
     // Kiểm tra email hợp lệ
-    public boolean isValidEmail(String email) {
+    public static boolean isValidEmail(String email) {
         if (email == null) {
             return false;
         }
@@ -49,7 +46,7 @@ public class ValidationForm {
     }
 
     // Kiểm tra số điện thoại (Chỉ 10 số, bắt đầu bằng 0)
-    public boolean isValidPhoneNumber(String phone) {
+    public static boolean isValidPhoneNumber(String phone) {
         if (phone == null) {
             return false;
         }
@@ -58,13 +55,13 @@ public class ValidationForm {
     }
 
     // Kiểm tra giá sản phẩm (Chỉ số nguyên dương, không bắt đầu bằng 0)
-    public boolean isValidPrice(BigDecimal price) {
+    public static boolean isValidPrice(BigDecimal price) {
         return price != null && price.compareTo(BigDecimal.ZERO) > 0;
     }
 
     // Kiểm tra số lượng tồn kho (Chỉ số nguyên dương, không bắt đầu bằng 0)
-    public boolean isValidStock(Integer stock) {
-        return stock != null && stock > 0;
+    public static boolean isValidStock(Integer stock) {
+        return stock == null || stock <= 0;
     }
 
 }

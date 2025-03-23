@@ -4,14 +4,13 @@ import com.poly.admin.model.Employee;
 import com.poly.admin.model.EmployeePassword;
 import com.poly.admin.repository.EmployeeRepo;
 import com.poly.admin.repository.PasswordRepo;
+import com.poly.admin.utils.Generator;
 import com.poly.admin.utils.HashedPassword;
 import com.poly.admin.utils.ValidationForm;
 import jakarta.persistence.EntityNotFoundException;
-import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.security.SecureRandom;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -26,13 +25,12 @@ public class EmployeeService {
     private HashedPassword hashedPassword;
     @Autowired
     private MailService mailService;
-    @Autowired
-    private ValidationForm validationForm;
 
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
             "abcdefghijklmnopqrstuvwxyz" +
             "0123456789@#$%^&*";
     private static final int PASSWORD_LENGTH = 10;
+
 
     public List<Employee> getAllEmployees() {
         return employeeRepo.findAll();
@@ -53,7 +51,9 @@ public class EmployeeService {
         String email = employeeData.getEmail();
         String phone = employeeData.getPhone();
 
-        if (!validationForm.isValidName(name) || !validationForm.isValidEmail(email) || !validationForm.isValidPhoneNumber(phone)) {
+        if (!ValidationForm.isValidName(name) ||
+                !ValidationForm.isValidEmail(email) ||
+                !ValidationForm.isValidPhoneNumber(phone)) {
             throw new IllegalArgumentException("Invalid input");
         }
 
@@ -97,15 +97,6 @@ public class EmployeeService {
         return passwordRepo.existsByEmployee_Id(id);
     }
 
-    private String generateRandomPassword() {
-        SecureRandom random = new SecureRandom();
-        StringBuilder password = new StringBuilder(PASSWORD_LENGTH);
-        for (int i = 0; i < PASSWORD_LENGTH; i++) {
-            int index = random.nextInt(CHARACTERS.length());
-            password.append(CHARACTERS.charAt(index));
-        }
-        return password.toString();
-    }
 
     public void createAccountForEmployee(String email) {
         Optional<Employee> optionalEmployee = employeeRepo.findByEmail(email);
@@ -114,7 +105,7 @@ public class EmployeeService {
         }
         try {
             Employee employee = optionalEmployee.get();
-            String rawPassword = generateRandomPassword();
+            String rawPassword = Generator.generateRandomPassword(PASSWORD_LENGTH, CHARACTERS);
             // Mã hóa mật khẩu bằng BCrypt
             String encodedPassword = hashedPassword.hashPassword(rawPassword);
             EmployeePassword password = new EmployeePassword();

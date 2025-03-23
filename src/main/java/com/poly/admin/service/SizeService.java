@@ -25,8 +25,6 @@ public class SizeService {
     private ProductSizeRepo productSizeRepo;
     @Autowired
     private ProductDetailRepo productDetailRepo;
-    @Autowired
-    private ValidationForm validationForm;
 
     public List<SizeSample> getAll() {
         return sizeRepo.findAll();
@@ -87,7 +85,7 @@ public class SizeService {
         for (SizeDTO sizeDTO : sizeDTOList) {
             if (sizeMap.containsKey(sizeDTO.getSize())) {
                 ProductSize existingSize = sizeMap.get(sizeDTO.getSize());
-                if (!validationForm.isValidStock(sizeDTO.getStock())) {
+                if (ValidationForm.isValidStock(sizeDTO.getStock())) {
                     throw new IllegalArgumentException("Invalid input");
                 }
                 existingSize.setStock(sizeDTO.getStock());
@@ -97,7 +95,7 @@ public class SizeService {
                 // Nếu kích thước chưa tồn tại => tạo mới
                 ProductSize newSize = new ProductSize();
                 newSize.setSize(sizeDTO.getSize());
-                if (!validationForm.isValidStock(sizeDTO.getStock())) {
+                if (ValidationForm.isValidStock(sizeDTO.getStock())) {
                     throw new IllegalArgumentException("Invalid input");
                 }
                 newSize.setStock(sizeDTO.getStock());

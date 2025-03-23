@@ -16,7 +16,6 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -29,8 +28,6 @@ public class ProductService {
     private GenderCategoryRepo genderCategoryRepo;
     @Autowired
     private SupplierRepo supplierRepo;
-    @Autowired
-    private ValidationForm validationForm;
 
     public Page<ProductDTO> getAllProducts(int page) {
         int size = 9; // 6 sản phẩm mỗi trang
@@ -64,7 +61,7 @@ public class ProductService {
         Integer genderCategoryId = productDTO.getGenderCategoryID();
         Integer shoesCategoryId = productDTO.getShoesCategoryID();
         BigDecimal price = productDTO.getPrice();
-        if (!validationForm.isValidPrice(price)){
+        if (!ValidationForm.isValidPrice(price)){
             throw new IllegalArgumentException("Invalid input");
         }
 
@@ -136,7 +133,7 @@ public class ProductService {
 
         Sort sort;
 
-        if (olderOrNewest.equalsIgnoreCase("older")) {
+        if (olderOrNewest.equalsIgnoreCase("oldest")) {
             sort = Sort.by("createAt").ascending();
         } else {
             sort = Sort.by("createAt").descending();

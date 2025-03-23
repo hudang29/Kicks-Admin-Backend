@@ -2,6 +2,7 @@ package com.poly.admin.service;
 
 import com.poly.admin.model.Coupon;
 import com.poly.admin.repository.CouponRepo;
+import com.poly.admin.utils.Generator;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,10 @@ public class CouponService {
         if (couponRepository.existsByCouponCode(coupon.getCouponCode())) {
             throw new IllegalArgumentException("Coupon code already exists");
         }
+        if(coupon.getName().isEmpty()){
+            throw new IllegalArgumentException("Not found coupon name");
+        }
+        coupon.setCouponCode(Generator.generateCoupon(coupon.getName(), 7));
         coupon.setCreatedAt(Instant.now());
         return couponRepository.save(coupon);
     }
