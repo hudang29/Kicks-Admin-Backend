@@ -83,6 +83,7 @@ public class OrderService {
             throw new IllegalArgumentException("Order is already completed or cancelled");
         }
 
+
         try {
             order.setOrderStatus(OrderStatus.valueOf(orderDTO.getOrderStatus().toUpperCase()));
         } catch (IllegalArgumentException e) {
@@ -107,6 +108,7 @@ public class OrderService {
         );
     }
 
+
     public List<OrderDTO> searchOrders(OrderStatus status, Integer year, Integer month) {
 
         Specification<Orders> spec = Specification
@@ -122,5 +124,4 @@ public class OrderService {
                 order.getTotalAmount()
         )).toList();
     }
-
 }

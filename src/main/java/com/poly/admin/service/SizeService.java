@@ -7,6 +7,7 @@ import com.poly.admin.model.SizeSample;
 import com.poly.admin.repository.ProductDetailRepo;
 import com.poly.admin.repository.ProductSizeRepo;
 import com.poly.admin.repository.SizeRepo;
+import com.poly.admin.utils.ValidationForm;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,8 @@ public class SizeService {
     private ProductSizeRepo productSizeRepo;
     @Autowired
     private ProductDetailRepo productDetailRepo;
+    @Autowired
+    private ValidationForm validationForm;
 
     public List<SizeSample> getAll() {
         return sizeRepo.findAll();
@@ -84,8 +87,22 @@ public class SizeService {
         for (SizeDTO sizeDTO : sizeDTOList) {
             if (sizeMap.containsKey(sizeDTO.getSize())) {
                 ProductSize existingSize = sizeMap.get(sizeDTO.getSize());
+                if (!validationForm.isValidStock(sizeDTO.getStock())) {
+                    throw new IllegalArgumentException("Invalid input");
+                }
                 existingSize.setStock(sizeDTO.getStock());
                 updatedProductSizes.add(existingSize);
+
+            } else {
+                // Nếu kích thước chưa tồn tại => tạo mới
+                ProductSize newSize = new ProductSize();
+                newSize.setSize(sizeDTO.getSize());
+                if (!validationForm.isValidStock(sizeDTO.getStock())) {
+                    throw new IllegalArgumentException("Invalid input");
+                }
+                newSize.setStock(sizeDTO.getStock());
+                newSize.setProductDetail(productDetail);
+                updatedProductSizes.add(newSize);
             }
         }
 

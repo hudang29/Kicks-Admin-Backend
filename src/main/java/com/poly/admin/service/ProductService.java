@@ -4,6 +4,7 @@ import com.poly.admin.dto.*;
 import com.poly.admin.model.*;
 import com.poly.admin.repository.*;
 import com.poly.admin.specification.ProductSpecification;
+import com.poly.admin.utils.ValidationForm;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +29,8 @@ public class ProductService {
     private GenderCategoryRepo genderCategoryRepo;
     @Autowired
     private SupplierRepo supplierRepo;
+    @Autowired
+    private ValidationForm validationForm;
 
     public Page<ProductDTO> getAllProducts(int page) {
         int size = 9; // 6 sản phẩm mỗi trang
@@ -59,6 +63,10 @@ public class ProductService {
         Integer supplierId = productDTO.getSupplierID();
         Integer genderCategoryId = productDTO.getGenderCategoryID();
         Integer shoesCategoryId = productDTO.getShoesCategoryID();
+        BigDecimal price = productDTO.getPrice();
+        if (!validationForm.isValidPrice(price)){
+            throw new IllegalArgumentException("Invalid input");
+        }
 
         GenderCategory genderCategory = genderCategoryRepo.findById(genderCategoryId)
                 .orElseThrow(() -> new EntityNotFoundException("Gender category does not exist!"));
