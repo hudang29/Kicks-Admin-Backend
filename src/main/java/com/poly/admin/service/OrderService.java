@@ -5,9 +5,10 @@ import com.poly.admin.enums.OrderStatus;
 import com.poly.admin.model.Employee;
 import com.poly.admin.model.Orders;
 import com.poly.admin.repository.EmployeeRepo;
-import com.poly.admin.repository.OrderDetailRepo;
 import com.poly.admin.repository.OrderRepo;
+import com.poly.admin.specification.OrderSpecification;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -77,6 +78,12 @@ public class OrderService {
                 () -> new IllegalArgumentException("Not found employee")
         );
 
+        if (order.getOrderStatus().name().equals(OrderStatus.CANCELLED.name()) ||
+                order.getOrderStatus().name().equals(OrderStatus.COMPLETED.name())) {
+            throw new IllegalArgumentException("Order is already completed or cancelled");
+        }
+
+
         try {
             order.setOrderStatus(OrderStatus.valueOf(orderDTO.getOrderStatus().toUpperCase()));
         } catch (IllegalArgumentException e) {
@@ -99,5 +106,22 @@ public class OrderService {
                 savedOrder.getTotalAmount(),
                 savedOrder.getShippingAddress() != null ? order.getShippingAddress() : null
         );
+    }
+
+
+    public List<OrderDTO> searchOrders(OrderStatus status, Integer year, Integer month) {
+
+        Specification<Orders> spec = Specification
+                .where(OrderSpecification.hasMonthAndYear(year, month))
+                .and(OrderSpecification.hasStatus(status));
+
+        return orderRepo.findAll(spec).stream().map(order -> new OrderDTO(
+                order.getId(),
+                order.getOrderDate(),
+                order.getPayment().getPaymentMethod(),
+                order.getCustomer().getName(),
+                order.getOrderStatus(),
+                order.getTotalAmount()
+        )).toList();
     }
 }

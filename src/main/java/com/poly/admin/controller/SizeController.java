@@ -51,7 +51,7 @@ public class SizeController {
     public ResponseEntity<?> updateSizes(@PathVariable Integer productDetailId,
                                          @RequestBody List<SizeDTO> sizeDTOList) {
         try {
-            sizeService.addOrUpdateSizeList(sizeDTOList, productDetailId);
+            sizeService.UpdateSizeList(sizeDTOList, productDetailId);
             return ResponseEntity.ok("Updated sizes successfully!");
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

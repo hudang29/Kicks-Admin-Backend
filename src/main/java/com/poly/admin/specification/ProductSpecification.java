@@ -3,8 +3,6 @@ package com.poly.admin.specification;
 import com.poly.admin.model.Product;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.time.Instant;
-
 public class ProductSpecification {
 
     public static Specification<Product> hasName(String name) {

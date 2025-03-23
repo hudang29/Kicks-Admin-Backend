@@ -41,6 +41,6 @@ public class OrderLog {
     @Size(max = 100)
     @Nationalized
     @Column(name = "Edit_by", length = 100)
-    private String createdBy;
+    private String editBy;
 
 }

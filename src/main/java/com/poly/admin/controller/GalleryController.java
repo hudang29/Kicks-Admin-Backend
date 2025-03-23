@@ -36,10 +36,10 @@ public class GalleryController {
     }
 
     @PostMapping("/api/add-gallery")
-    public ResponseEntity<String> addGallery(@RequestBody GalleryDTO galleryDTO) {
+    public ResponseEntity<?> addGallery(@RequestBody GalleryDTO galleryDTO) {
         try {
-            galleryService.addGallery(galleryDTO);
-            return ResponseEntity.ok("Gallery added successfully!");
+            GalleryDTO newGallery = galleryService.addGallery(galleryDTO);
+            return ResponseEntity.ok(newGallery);
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: " + e.getMessage());
         }

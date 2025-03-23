@@ -8,6 +8,7 @@ import com.poly.admin.repository.ProductDetailRepo;
 import com.poly.admin.repository.ProductSizeRepo;
 import com.poly.admin.repository.SizeRepo;
 import com.poly.admin.utils.ValidationForm;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +56,25 @@ public class SizeService {
         ProductDetail productDetail = productDetailRepo.findById(productDetailId)
                 .orElseThrow(() -> new RuntimeException("Product detail not found"));
 
+        List<ProductSize> updatedProductSizes = new ArrayList<>();
+
+        for (SizeDTO sizeDTO : sizeDTOList) {
+            // Nếu kích thước chưa tồn tại => tạo mới
+            ProductSize newSize = new ProductSize();
+            newSize.setSize(sizeDTO.getSize());
+            newSize.setStock(sizeDTO.getStock());
+            newSize.setProductDetail(productDetail);
+            updatedProductSizes.add(newSize);
+        }
+
+        // Lưu danh sách đã cập nhật hoặc thêm mới vào DB
+        productSizeRepo.saveAll(updatedProductSizes);
+    }
+
+    public void UpdateSizeList(List<SizeDTO> sizeDTOList, Integer productDetailId) {
+        ProductDetail productDetail = productDetailRepo.findById(productDetailId)
+                .orElseThrow(() -> new EntityNotFoundException("Product detail not found"));
+
         // Lấy danh sách size hiện có trong DB
         List<ProductSize> existingSizes = productSizeRepo.findByProductDetail_Id(productDetailId);
 
@@ -66,13 +86,13 @@ public class SizeService {
 
         for (SizeDTO sizeDTO : sizeDTOList) {
             if (sizeMap.containsKey(sizeDTO.getSize())) {
-                // Nếu kích thước đã tồn tại => cập nhật stock
                 ProductSize existingSize = sizeMap.get(sizeDTO.getSize());
                 if (!validationForm.isValidStock(sizeDTO.getStock())) {
                     throw new IllegalArgumentException("Invalid input");
                 }
                 existingSize.setStock(sizeDTO.getStock());
                 updatedProductSizes.add(existingSize);
+
             } else {
                 // Nếu kích thước chưa tồn tại => tạo mới
                 ProductSize newSize = new ProductSize();
