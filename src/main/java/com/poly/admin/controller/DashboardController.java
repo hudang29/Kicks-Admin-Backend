@@ -1,11 +1,15 @@
 package com.poly.admin.controller;
 
 import com.poly.admin.dto.*;
+import com.poly.admin.enums.OrderStatus;
 import com.poly.admin.service.DashboardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
+import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -14,6 +18,10 @@ public class DashboardController {
     @Autowired
     private DashboardService dashboardService;
 
+    LocalDate currentDate = LocalDate.now();
+    Integer year = currentDate.getYear();
+    Integer month = currentDate.getMonthValue();
+
     @GetMapping("/sales-graph")
     public ResponseEntity<List<SaleGraphData>> getSalesGraphByMonth() {
         List<SaleGraphData> data = dashboardService.getSalesDataByMonth();
@@ -21,7 +29,7 @@ public class DashboardController {
     }
 
     @GetMapping("/sales-graph/{year}")
-    public ResponseEntity<List<SaleGraphData>> getSalesGraphEachYear(@PathVariable int year) {
+    public ResponseEntity<List<SaleGraphData>> getSalesGraphEachYear(@PathVariable Integer year) {
         List<SaleGraphData> data = dashboardService.getSalesDataEachYear(year);
         return ResponseEntity.ok(data);
     }
@@ -32,16 +40,24 @@ public class DashboardController {
         return ResponseEntity.ok(data);
     }
 
+    @GetMapping("/total-amount")
+    public BigDecimal getTotalAmountByStatus(@RequestParam OrderStatus status,
+                                             @RequestParam(required = false) Integer year,
+                                             @RequestParam(required = false) Integer month) {
+        return dashboardService.getRevenueMonthlyByStatus(status, year, month);
+    }
+
     // API lấy tổng doanh thu trong tháng hiện tại
     @GetMapping("/total-revenue")
-    public ResponseEntity<Double> getTotalRevenueThisMonth() {
-        Double revenue = dashboardService.getTotalRevenueThisMonth();
+    public ResponseEntity<BigDecimal> getTotalRevenueThisMonth() {
+
+        BigDecimal revenue = dashboardService.getRevenueMonthlyByStatus(OrderStatus.COMPLETED, year, month);
         return revenue != null ? ResponseEntity.ok(revenue) : ResponseEntity.noContent().build();
     }
 
     @GetMapping("/total-revenue-orders")
-    public ResponseEntity<Double> getTotalRevenueByOrdersThisMonth() {
-        Double revenue = dashboardService.getTotalRevenueByOrdersThisMonth();
+    public ResponseEntity<BigDecimal> getTotalRevenueByOrdersThisMonth() {
+        BigDecimal revenue = dashboardService.getTotalRevenueByOrdersThisMonth(year, month);
         return revenue != null ? ResponseEntity.ok(revenue) : ResponseEntity.noContent().build();
     }
 
@@ -53,18 +69,18 @@ public class DashboardController {
     }
 
     // API lấy tổng doanh thu theo trạng thái Canceled trong tháng hiện tại
-    @GetMapping("/total-revenue-by-status-canceled")
-    public ResponseEntity<Double> getTotalRevenueByStatusCanceled() {
-        Double data = dashboardService.getTotalRevenueByStatusCanceled();
-        return data != null ? ResponseEntity.ok(data) : ResponseEntity.noContent().build();
-    }
-
-    // API lấy tổng số lượng giày đã bán trong tháng
-    @GetMapping("/total-shoes-sale")
-    public ResponseEntity<Integer> getTotalShoesSaleThisMonth() {
-        Integer data = dashboardService.getTotalShoesSale();
-        return data != null ? ResponseEntity.ok(data) : ResponseEntity.noContent().build();
-    }
+//    @GetMapping("/total-revenue-by-status-canceled")
+//    public ResponseEntity<Double> getTotalRevenueByStatusCanceled() {
+//        Double data = dashboardService.getTotalRevenueByStatusCanceled();
+//        return data != null ? ResponseEntity.ok(data) : ResponseEntity.noContent().build();
+//    }
+//
+//    // API lấy tổng số lượng giày đã bán trong tháng
+//    @GetMapping("/total-shoes-sale")
+//    public ResponseEntity<Integer> getTotalShoesSaleThisMonth() {
+//        Integer data = dashboardService.getTotalShoesSale();
+//        return data != null ? ResponseEntity.ok(data) : ResponseEntity.noContent().build();
+//    }
 
     // API lấy top 6 đơn hàng mới nhất
     @GetMapping("/get-latest-orders")
