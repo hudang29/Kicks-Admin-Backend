@@ -5,7 +5,9 @@ import com.poly.admin.model.EmployeePassword;
 import com.poly.admin.repository.EmployeeRepo;
 import com.poly.admin.repository.PasswordRepo;
 import com.poly.admin.utils.HashedPassword;
+import com.poly.admin.utils.ValidationForm;
 import jakarta.persistence.EntityNotFoundException;
+import jakarta.validation.ValidationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,8 @@ public class EmployeeService {
     private HashedPassword hashedPassword;
     @Autowired
     private MailService mailService;
+    @Autowired
+    private ValidationForm validationForm;
 
     private static final String CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ" +
             "abcdefghijklmnopqrstuvwxyz" +
@@ -45,6 +49,14 @@ public class EmployeeService {
 
     public Employee createOrUpdateEmployee(Employee employeeData) {
         Integer id = employeeData.getId();
+        String name = employeeData.getName();
+        String email = employeeData.getEmail();
+        String phone = employeeData.getPhone();
+
+        if (!validationForm.isValidName(name) || !validationForm.isValidEmail(email) || !validationForm.isValidPhoneNumber(phone)) {
+            throw new IllegalArgumentException("Invalid input");
+        }
+
         Employee employee;
         if (employeeRepo.existsById(id)) {
             employee = employeeRepo.findById(id).orElseThrow(
@@ -55,9 +67,10 @@ public class EmployeeService {
             employee.setCreateAt(Instant.now());
         }
 
-        employee.setName(employeeData.getName());
-        employee.setEmail(employeeData.getEmail());
-        employee.setPhone(employeeData.getPhone());
+
+        employee.setName(name);
+        employee.setEmail(email);
+        employee.setPhone(phone);
         employee.setAddress(employeeData.getAddress());
         employee.setRole(employeeData.getRole());
         employee.setCity(employeeData.getCity());
