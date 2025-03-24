@@ -9,9 +9,10 @@ import java.util.Optional;
 public interface ShoesCategoryRepo extends JpaRepository<ShoesCategory, Integer> {
     List<ShoesCategory> findByGenderCategoryId(Integer id);
 
-    @Override
     List<ShoesCategory> findAll();
 
-    @Override
     Optional<ShoesCategory> findById(Integer id);
+
+    @Override
+    <S extends ShoesCategory> S save(S entity);
 }

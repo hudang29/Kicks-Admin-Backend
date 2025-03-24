@@ -2,6 +2,7 @@ package com.poly.admin.service;
 
 import com.poly.admin.dto.ShoesCategoryDTO;
 import com.poly.admin.model.GenderCategory;
+import com.poly.admin.model.ShoesCategory;
 import com.poly.admin.repository.ShoesCategoryRepo;
 import com.poly.admin.repository.GenderCategoryRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,4 +47,62 @@ public class CategoryService {
                 () -> new IllegalArgumentException("Gender Category Not Found")
         );
     }
+
+    public ShoesCategoryDTO updateShoesCategory(ShoesCategoryDTO dto) {
+        if (!shoesCategoryRepo.existsById(dto.getId())) {
+            throw new IllegalArgumentException("Shoes Category Not Found");
+        }
+        GenderCategory genderCategory = genderCategoryRepo.findById(dto.getGenderCategoryID()).orElseThrow(
+                () -> new IllegalArgumentException("Gender Category Not Found")
+        );
+        if (dto.getName().isEmpty()) {
+            throw new IllegalArgumentException("Name is Empty");
+        }
+        ShoesCategory shoesCategory = new ShoesCategory();
+        shoesCategory.setId(dto.getId());
+        shoesCategory.setGenderCategory(genderCategory);
+        shoesCategory.setName(dto.getName());
+
+
+        ShoesCategory response = shoesCategoryRepo.save(shoesCategory);
+        return new ShoesCategoryDTO(response.getId(),
+                response.getGenderCategory().getId(),
+                response.getName());
+    }
+
+    public ShoesCategoryDTO addShoesCategory(ShoesCategoryDTO dto) {
+        GenderCategory genderCategory = genderCategoryRepo.findById(dto.getGenderCategoryID()).orElseThrow(
+                () -> new IllegalArgumentException("Gender Category Not Found")
+        );
+        if (dto.getName().isEmpty()) {
+            throw new IllegalArgumentException("Name is Empty");
+        }
+        ShoesCategory shoesCategory = new ShoesCategory();
+        shoesCategory.setGenderCategory(genderCategory);
+        shoesCategory.setName(dto.getName());
+
+        ShoesCategory response = shoesCategoryRepo.save(shoesCategory);
+        return new ShoesCategoryDTO(response.getId(),
+                response.getGenderCategory().getId(),
+                response.getName());
+    }
+
+    public GenderCategory addGenderCategory(GenderCategory gender) {
+
+        if (gender.getName().isEmpty()) {
+            throw new IllegalArgumentException("Name is Empty");
+        }
+        return genderCategoryRepo.save(gender);
+    }
+
+    public GenderCategory updateGenderCategory(GenderCategory gender) {
+        if (!genderCategoryRepo.existsById(gender.getId())) {
+            throw new IllegalArgumentException("Gender Category Not Found");
+        }
+        if (gender.getName().isEmpty()) {
+            throw new IllegalArgumentException("Name is Empty");
+        }
+        return genderCategoryRepo.save(gender);
+    }
+
 }

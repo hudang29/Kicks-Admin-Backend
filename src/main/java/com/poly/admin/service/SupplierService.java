@@ -21,4 +21,23 @@ public class SupplierService {
                 () -> new RuntimeException("Supplier not found")
         );
     }
+
+    public Supplier addSupplier(Supplier supplier) {
+        if (supplier.getName().isEmpty() ||
+                supplier.getAddress().isEmpty() || supplier.getContactInfo().isEmpty()) {
+            throw new IllegalArgumentException("Supplier data is empty");
+        }
+        return supplierRepo.save(supplier);
+    }
+
+    public Supplier updateSupplier(Supplier supplier) {
+        if (!supplierRepo.existsById(supplier.getId())) {
+            throw new IllegalArgumentException("Supplier not found");
+        }
+        if (supplier.getName().isEmpty() ||
+                supplier.getAddress().isEmpty() || supplier.getContactInfo().isEmpty()) {
+            throw new IllegalArgumentException("Supplier data is empty");
+        }
+        return supplierRepo.save(supplier);
+    }
 }

@@ -1,5 +1,6 @@
 package com.poly.admin.utils;
 
+import io.micrometer.common.util.StringUtils;
 import java.math.BigDecimal;
 
 public class ValidationForm {
@@ -62,6 +63,12 @@ public class ValidationForm {
     // Kiểm tra số lượng tồn kho (Chỉ số nguyên dương, không bắt đầu bằng 0)
     public static boolean isValidStock(Integer stock) {
         return stock == null || stock <= 0;
+    }
+
+    public static void validateNotEmpty(String value, String fieldName) {
+        if (StringUtils.isBlank(value)) {
+            throw new IllegalArgumentException(fieldName + " cannot be null or empty");
+        }
     }
 
 }
