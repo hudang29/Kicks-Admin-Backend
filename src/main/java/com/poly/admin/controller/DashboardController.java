@@ -22,12 +22,6 @@ public class DashboardController {
     Integer year = currentDate.getYear();
     Integer month = currentDate.getMonthValue();
 
-    @GetMapping("/sales-graph")
-    public ResponseEntity<List<SaleGraphData>> getSalesGraphByMonth() {
-        List<SaleGraphData> data = dashboardService.getSalesDataByMonth();
-        return ResponseEntity.ok(data);
-    }
-
     @GetMapping("/sales-graph/{year}")
     public ResponseEntity<List<SaleGraphData>> getSalesGraphEachYear(@PathVariable Integer year) {
         List<SaleGraphData> data = dashboardService.getSalesDataEachYear(year);
@@ -47,13 +41,6 @@ public class DashboardController {
         return dashboardService.getRevenueMonthlyByStatus(status, year, month);
     }
 
-    // API lấy tổng doanh thu trong tháng hiện tại
-    @GetMapping("/total-revenue")
-    public ResponseEntity<BigDecimal> getTotalRevenueThisMonth() {
-
-        BigDecimal revenue = dashboardService.getRevenueMonthlyByStatus(OrderStatus.COMPLETED, year, month);
-        return revenue != null ? ResponseEntity.ok(revenue) : ResponseEntity.noContent().build();
-    }
 
     @GetMapping("/total-revenue-orders")
     public ResponseEntity<BigDecimal> getTotalRevenueByOrdersThisMonth() {
@@ -61,20 +48,6 @@ public class DashboardController {
         return revenue != null ? ResponseEntity.ok(revenue) : ResponseEntity.noContent().build();
     }
 
-    // API lấy tổng doanh thu theo trạng thái trong tháng hiện tại
-    @GetMapping("/total-revenue-by-status")
-    public ResponseEntity<List<SalesSummaryDTO>> getTotalRevenueByStatus() {
-        List<SalesSummaryDTO> data = dashboardService.getTotalRevenueByStatus();
-        return data.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(data);
-    }
-
-    // API lấy tổng doanh thu theo trạng thái Canceled trong tháng hiện tại
-//    @GetMapping("/total-revenue-by-status-canceled")
-//    public ResponseEntity<Double> getTotalRevenueByStatusCanceled() {
-//        Double data = dashboardService.getTotalRevenueByStatusCanceled();
-//        return data != null ? ResponseEntity.ok(data) : ResponseEntity.noContent().build();
-//    }
-//
 //    // API lấy tổng số lượng giày đã bán trong tháng
 //    @GetMapping("/total-shoes-sale")
 //    public ResponseEntity<Integer> getTotalShoesSaleThisMonth() {

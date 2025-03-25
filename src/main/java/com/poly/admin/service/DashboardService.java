@@ -19,12 +19,6 @@ public class DashboardService {
     @Autowired
     private OrderRepo orderRepository;
 
-
-    public List<SaleGraphData> getSalesDataByMonth() {
-
-        return orderRepository.getSalesDataByMonth();
-    }
-
     public List<SaleGraphData> getSalesDataEachYear(Integer year) {
         Specification<Orders> spec = Specification
                 .where(OrderSpecification.hasMonthAndYear(year, null))
@@ -43,10 +37,6 @@ public class DashboardService {
         Specification<Orders> spec = Specification
                 .where(OrderSpecification.hasMonthAndYear(year, month));
         return orderRepository.getTotalAmountByStatus(spec);
-    }
-
-    public List<SalesSummaryDTO> getTotalRevenueByStatus() {
-        return orderRepository.getTotalRevenueByStatus();
     }
 
     public BigDecimal getRevenueMonthlyByStatus(OrderStatus status, Integer year, Integer month) {

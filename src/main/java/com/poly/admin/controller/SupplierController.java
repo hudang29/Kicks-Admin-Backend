@@ -41,7 +41,7 @@ public class SupplierController {
         }
     }
 
-    @PostMapping("/update-supplier")
+    @PostMapping("/create-supplier")
     public ResponseEntity<?> addSupplier(@RequestBody Supplier supplier) {
         try {
             Supplier response = supplierService.addSupplier(supplier);
