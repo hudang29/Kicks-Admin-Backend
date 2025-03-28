@@ -26,13 +26,13 @@ public interface OrderRepo
 //    List<SaleGraphData> getSalesDataEachYear(@Param("year") Integer year);
 
     // Doanh thu theo tháng
-    @Query("""
-            SELECT new com.poly.admin.dto.SaleGraphData(MONTH(o.orderDate), SUM(o.totalAmount))
-            FROM Orders o WHERE YEAR(o.orderDate) = YEAR(CURRENT_DATE)
-            AND o.orderStatus = com.poly.admin.enums.OrderStatus.COMPLETED
-            GROUP BY MONTH(o.orderDate) ORDER BY MONTH(o.orderDate)
-            """)
-    List<SaleGraphData> getSalesDataByMonth();
+//    @Query("""
+//            SELECT new com.poly.admin.dto.SaleGraphData(MONTH(o.orderDate), SUM(o.totalAmount))
+//            FROM Orders o WHERE YEAR(o.orderDate) = YEAR(CURRENT_DATE)
+//            AND o.orderStatus = com.poly.admin.enums.OrderStatus.COMPLETED
+//            GROUP BY MONTH(o.orderDate) ORDER BY MONTH(o.orderDate)
+//            """)
+//    List<SaleGraphData> getSalesDataByMonth();
 
     // Doanh thu theo năm
 //    @Query("""
@@ -53,35 +53,35 @@ public interface OrderRepo
 //    Double getTotalRevenueThisMonth();
 
     // Lấy tổng doanh thu trong tháng hiện tại
-    @Query("""
-            SELECT SUM(o.totalAmount)
-            FROM Orders o
-            WHERE MONTH(o.orderDate) = MONTH(CURRENT_DATE)
-            AND YEAR(o.orderDate) = YEAR(CURRENT_DATE)
-            AND o.orderStatus <> com.poly.admin.enums.OrderStatus.CANCELLED
-            """)
-    Double getTotalRevenueByOrdersThisMonth();
+//    @Query("""
+//            SELECT SUM(o.totalAmount)
+//            FROM Orders o
+//            WHERE MONTH(o.orderDate) = MONTH(CURRENT_DATE)
+//            AND YEAR(o.orderDate) = YEAR(CURRENT_DATE)
+//            AND o.orderStatus <> com.poly.admin.enums.OrderStatus.CANCELLED
+//            """)
+//    Double getTotalRevenueByOrdersThisMonth();
 
     // Lấy tổng doanh thu theo từng trạng thái trong tháng
-    @Query("""
-            SELECT new com.poly.admin.dto.SalesSummaryDTO(o.orderStatus , SUM(o.totalAmount))
-            FROM Orders o
-            WHERE MONTH(o.orderDate) = MONTH(CURRENT_DATE)
-            AND YEAR(o.orderDate) = YEAR(CURRENT_DATE)
-            GROUP BY o.orderStatus
-            """)
-    List<SalesSummaryDTO> getTotalRevenueByStatus();
+//    @Query("""
+//            SELECT new com.poly.admin.dto.SalesSummaryDTO(o.orderStatus , SUM(o.totalAmount))
+//            FROM Orders o
+//            WHERE MONTH(o.orderDate) = MONTH(CURRENT_DATE)
+//            AND YEAR(o.orderDate) = YEAR(CURRENT_DATE)
+//            GROUP BY o.orderStatus
+//            """)
+//    List<SalesSummaryDTO> getTotalRevenueByStatus();
 
     // Lấy tổng doanh thu theo trạng thái canceled trong tháng
-    @Query("""
-            SELECT SUM(o.totalAmount)
-            FROM Orders o
-            WHERE MONTH(o.orderDate) = MONTH(CURRENT_DATE)
-            AND YEAR(o.orderDate) = YEAR(CURRENT_DATE)
-            AND o.orderStatus = com.poly.admin.enums.OrderStatus.CANCELLED
-            GROUP BY o.orderStatus
-            """)
-    Double getTotalRevenueByStatusCanceled();
+//    @Query("""
+//            SELECT SUM(o.totalAmount)
+//            FROM Orders o
+//            WHERE MONTH(o.orderDate) = MONTH(CURRENT_DATE)
+//            AND YEAR(o.orderDate) = YEAR(CURRENT_DATE)
+//            AND o.orderStatus = com.poly.admin.enums.OrderStatus.CANCELLED
+//            GROUP BY o.orderStatus
+//            """)
+//    Double getTotalRevenueByStatusCanceled();
 
     @Query("""
             SELECT new com.poly.admin.dto.OrderDTO(
@@ -121,41 +121,5 @@ public interface OrderRepo
             """)
     List<LowStockProductDTO> findLowStockProducts(@Param("threshold") Integer threshold);
 
-    //Lấy danh sách hóa đơn (ưu tiên chưa xưr lý)
-//    @Query("""
-//                SELECT new com.poly.admin.dto.OrderDTO(
-//                    o.id,
-//                    cp.id,
-//                    c.name,
-//                    o.shippingAddress,
-//                    o.orderDate,
-//                    o.orderStatus,
-//                    o.totalAmount
-//                )
-//                FROM OrderDetail od
-//                JOIN od.order o
-//                JOIN o.customer c
-//                LEFT JOIN o.coupon cp
-//                ORDER BY
-//                    CASE
-//                        WHEN o.orderStatus = 'Chờ xử lý' THEN 1
-//                        ELSE 2
-//                    END,
-//                    o.orderDate DESC
-//            """)
-//    Page<OrderDTO> findAllOrders(Pageable pageable);
-
-    //@Override
-    //Page<Orders> findAll(Pageable pageable);
-
-    //Lấy danh sách hóa đơn (ưu tiên chưa xưr lý)
-//    @Query("""
-//                SELECT o
-//                FROM Orders o
-//                WHEN o.orderStatus = :status
-//                o.orderDate DESC
-//            """)
     List<Orders> findAllByOrderStatusOrderByOrderDateAsc(OrderStatus orderStatus);
-
-
 }

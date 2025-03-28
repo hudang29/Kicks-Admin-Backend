@@ -1,7 +1,9 @@
 package com.poly.admin.repository;
 
+import com.poly.admin.dto.BestSellerDTO;
 import com.poly.admin.dto.SaleGraphData;
 import com.poly.admin.model.Orders;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
@@ -13,4 +15,6 @@ public interface DashboardRepo {
     List<SaleGraphData> getSalesDataEachYear(Specification<Orders> spec);
 
     List<SaleGraphData> getSalesDataByYear(Specification<Orders> spec);
+
+    List<BestSellerDTO> findTopBestSellers(Pageable pageable);
 }

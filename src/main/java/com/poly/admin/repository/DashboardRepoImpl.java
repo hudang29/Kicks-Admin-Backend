@@ -1,10 +1,13 @@
 package com.poly.admin.repository;
 
+import com.poly.admin.dto.BestSellerDTO;
 import com.poly.admin.dto.SaleGraphData;
-import com.poly.admin.model.Orders;
+import com.poly.admin.model.*;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.TypedQuery;
 import jakarta.persistence.criteria.*;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import java.math.BigDecimal;
@@ -73,5 +76,57 @@ public class DashboardRepoImpl implements DashboardRepo {
 
         return entityManager.createQuery(query).getResultList();
     }
+
+    @Override
+    public List<BestSellerDTO> findTopBestSellers(Pageable pageable) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<BestSellerDTO> cq = cb.createQuery(BestSellerDTO.class);
+
+        // Root của OrderDetail
+        Root<OrderDetail> od = cq.from(OrderDetail.class);
+
+        // JOIN với Product
+        Join<OrderDetail, Product> p = od.join("product");
+
+        // Subquery để lấy ProductDetail đúng màu sắc
+        Subquery<ProductDetail> subqueryPD = cq.subquery(ProductDetail.class);
+        Root<ProductDetail> pd = subqueryPD.from(ProductDetail.class);
+        subqueryPD.select(pd)
+                .where(cb.equal(pd.get("product"), p));
+//
+//        // Tạo subquery để JOIN Gallery vì không có @OneToMany trong ProductDetail
+        Subquery<String> subqueryG = cq.subquery(String.class);
+        Root<Gallery> g = subqueryG.from(Gallery.class);
+        subqueryG.select(g.get("image"))
+                .where(cb.equal(g.get("productDetail"), pd),
+                        cb.equal(g.get("isDefault"), true));
+
+
+        // Chọn các cột cần lấy
+        cq.select(cb.construct(
+                BestSellerDTO.class,
+                p.get("id"),
+                p.get("name"),
+                p.get("price"),
+                pd.get("color"),
+                pd.get("color"),  // Lấy ảnh theo điều kiện
+                cb.sum(od.get("quantity"))
+        ));
+
+        // GROUP BY các cột cần thiết
+        cq.groupBy(p.get("id"), p.get("name"), p.get("price"), pd.get("color"), pd.get("color"));
+
+        // ORDER BY tổng số lượng bán
+        cq.orderBy(cb.desc(cb.sum(od.get("quantity"))));
+
+        // Thực thi query với pagination
+        TypedQuery<BestSellerDTO> query = entityManager.createQuery(cq);
+        query.setFirstResult((int) pageable.getOffset());
+        query.setMaxResults(pageable.getPageSize());
+
+        return query.getResultList();
+    }
+
+
 
 }
