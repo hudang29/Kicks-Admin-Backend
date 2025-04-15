@@ -3,12 +3,15 @@ package com.poly.admin.controller;
 import com.poly.admin.dto.AuthRequest;
 import com.poly.admin.dto.AuthResponse;
 import com.poly.admin.service.AuthService;
+import com.poly.admin.service.EmployeeService;
 import com.poly.admin.utils.JwtUtil;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
     @Autowired
     private AuthService authService;
+    @Autowired
+    private EmployeeService employeeService;
     @Autowired
     private JwtUtil jwtUtil;
 
@@ -51,6 +56,16 @@ public class AuthController {
         response.addCookie(clearCookie);
 
         return ResponseEntity.ok("You have been logged out successfully.");
+    }
+
+    @PutMapping("/api/forgot-password")
+    public ResponseEntity<?> forgotPassword(@RequestBody String email) {
+        try {
+            employeeService.forgotPassword(email);
+            return ResponseEntity.ok(true);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+        }
     }
 
 

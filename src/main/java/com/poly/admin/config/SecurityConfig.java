@@ -36,10 +36,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/api/login", "/api/logout").permitAll()
-//                        .requestMatchers("/admin/**").hasRole("ADMIN")
-//                        .requestMatchers("/manager/**").hasAnyRole("ADMIN", "MANAGER")
-//                        .requestMatchers("/staff/**").hasAnyRole("ADMIN", "MANAGER", "STAFF")
+                        .requestMatchers("/api/login", "/api/logout").permitAll()
+                        .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/manager/**").hasAnyRole("ADMIN", "MANAGER")
+                        .requestMatchers("/staff/**").hasAnyRole("ADMIN", "MANAGER", "STAFF")
                         .anyRequest().permitAll())
                 .cors(httpSecurityCorsConfigurer -> corsConfigurationSource())
                 .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); // Đăng ký JwtFilter

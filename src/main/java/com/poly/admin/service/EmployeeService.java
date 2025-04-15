@@ -123,4 +123,28 @@ public class EmployeeService {
         }
 
     }
+
+    public void forgotPassword(String email) {
+        //Employee employee = employeeRepo.findByEmail(email).orElseThrow(EntityNotFoundException::new);
+        EmployeePassword password = passwordRepo
+                .findByEmployee_Email(email)
+                .orElseThrow(
+                        () -> new EntityNotFoundException("Employee not found")
+                );
+        try {
+            String resetPassword = Generator.generateRandomPassword(PASSWORD_LENGTH, CHARACTERS);
+            // Mã hóa mật khẩu bằng BCrypt
+            String encodedPassword = hashedPassword.hashPassword(resetPassword);
+            password.setHashedPassword(encodedPassword);
+            passwordRepo.save(password);
+
+            boolean emailSent = mailService.sendPasswordToEmployee(email, resetPassword);
+            if (!emailSent) {
+                throw new RuntimeException("Gửi email thất bại");
+            }
+        } catch (Exception e) {
+            throw new EntityNotFoundException("Employee not found");
+        }
+
+    }
 }
